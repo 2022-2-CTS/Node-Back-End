@@ -12,9 +12,9 @@ jobs: # Github Actions 감지 후 할 일
         uses: actions/checkout@v2
 
       - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
+        uses: appleboy/ssh-action@master
         with:
-          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: SSH to EC2 and deploy
         uses: appleboy/ssh-action@master
