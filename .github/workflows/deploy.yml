@@ -1,0 +1,29 @@
+name: Deploy # Workflow 이름
+on: # Github Actions 감지
+  push:
+    branches:
+      - master # master branch의 Actions(push) 감지
+jobs: # Github Actions 감지 후 할 일
+  AUTO_DEPLOY:
+    runs-on: ubuntu-latest # 최신 버전 ubuntu에서 실행됨
+    
+    steps:
+      - name: Checkout Code # 레포지터리 체크아웃
+      - uses: actions/checkout@v2
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: SSH to EC2 and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          port: ${{ secrets.EC2_SSH_PORT }}
+          script: |
+            cd ~/BusanCulture/backend
+            git pull
+            npm install
+            npm start
