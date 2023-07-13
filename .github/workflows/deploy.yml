@@ -9,7 +9,7 @@ jobs: # Github Actions 감지 후 할 일
     
     steps:
       - name: Checkout Code # 레포지터리 체크아웃
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
