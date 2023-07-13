@@ -11,6 +11,11 @@ jobs: # Github Actions 감지 후 할 일
       - name: Checkout Code # 레포지터리 체크아웃
         uses: actions/checkout@v2
 
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: SSH to EC2 and deploy
         uses: appleboy/ssh-action@master
         with:
