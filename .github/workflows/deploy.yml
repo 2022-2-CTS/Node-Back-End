@@ -9,21 +9,26 @@ jobs: # Github Actions 감지 후 할 일
     
     steps:
       - name: Checkout Code # 레포지터리 체크아웃
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #- name: Install SSH key
+      #  uses: appleboy/ssh-action@master
+      #  with:
+      #    password: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: SSH to EC2 and deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
+<<<<<<< HEAD
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+=======
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
+>>>>>>> 2fa4ee70c1a0199790ad1097d7b95340340f2b26
           port: ${{ secrets.EC2_SSH_PORT }}
           script: |
+            sudo lsof -i :3000 | grep LISTEN | awk '{print $2}' | xargs sudo kill
             cd ~/BusanCulture/backend
             git pull
             npm install
