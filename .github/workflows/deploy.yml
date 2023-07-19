@@ -21,6 +21,7 @@ jobs: # Github Actions 감지 후 할 일
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.EC2_SSH_PORT }}
           script: |
             cd ~/BusanCulture/backend

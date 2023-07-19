@@ -27,7 +27,7 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-console.log("workflow test");
+console.log("start");
 
 // error handler
 app.use(function(err, req, res, next) {
