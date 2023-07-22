@@ -28,4 +28,5 @@ jobs: # Github Actions 감지 후 할 일
             cd ~/BusanCulture/backend
             git pull
             npm install
-            npm start
+            forever start -c "npm start"
+            exit
