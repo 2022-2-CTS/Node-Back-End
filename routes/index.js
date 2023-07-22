@@ -1,28 +1,18 @@
 var express = require('express');
 var router = express.Router();
+
+// ADD: body paser, cors
 var cors = require('cors');
-var app = express();
-var server = require('http').createServer(app);
 var bodyParser = require('body-parser');
+router.use(bodyParser.urlencoded({extended:false}));
+router.use(cors());
+router.use(bodyParser.json());
 
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(cors());
-app.use(bodyParser.json());
-
-app.post('/api', (req, res) => {
+// TEST: POST '/api/index/test'
+router.post('/test', (req, res) => {
   const code = req.body.code;
   console.log(code);
-  res.send("확인!!")
+  res.send("success")
 })
 
-server.listen(8080, () => {
-  console.log('server is running on 8080')
-});
-
-/* GET home page. */
-// router.get('/test', function(req, res, next) {
-//   // res.render('index', { title: 'Express' });
-//   res.send({ success: true} );
-// });
-
-// module.exports = router;
+module.exports = router;
