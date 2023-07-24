@@ -8,7 +8,10 @@ router.use(bodyParser.urlencoded({extended:false}));
 router.use(cors());
 router.use(bodyParser.json());
 const axios = require('axios');
+const { response } = require('express');
 
+
+//카카오 로그인 구현부
 router.post('/test', (req, res) => {
   const loginCode = req.body.code;
   console.log(loginCode);
@@ -51,6 +54,54 @@ router.post('/test', (req, res) => {
       res.send("로그인 실패..")
       // res.status(500).json({ error: 'JWT토큰 발급에 실패했습니다.' });
     });
+});
+
+
+//네이버 로그인 구현부
+router.post('/naverLogin', (req, res) =>  {
+  const loginCode = req.body.code;
+  const stateCode = req.body.state;
+
+  console.log(loginCode);
+  console.log(stateCode);
+
+  const clientId = 'o9JmjRrP1GmmANohGaH1';
+  const clientSecret = 'NP5C6CJ72j'
+  const redirectUri = 'http://localhost:3000/naver-login'
+
+  apiUrl = 'https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id='
+  +clientId + '&client_secret=' + clientSecret + '&redirect_uri=' + redirectUri + '&code=' + loginCode + '&state=' + stateCode;
+  axios({
+    method : 'get',
+    url : apiUrl,
+    header : {'X-Naver-Client-Id':clientId, 'X-Naver-Client-Secret':clientSecret}
+  })
+  .then((response) => {
+    console.log(JSON.stringify(response.data))
+    const {token_type} = response.data
+    const {access_token} = response.data
+    axios.post(
+      'https://openapi.naver.com/v1/nid/me',
+      {},
+      {
+        headers : {
+          Authorization : token_type + ' ' + access_token
+        }
+      }
+    ).then((response) => {
+      console.log('이번에도 진짜진짜 몬가몬가다', response.data);
+      res.send("로그인 성공!!")
+    }).catch((Error) => {
+      res.send("진짜루..?")
+      console.log(Error);
+      res.send(Error)
+    })
+  })
+  .catch((error) => {
+    console.log('JWT토큰 발급에 실패했습니다.', error);
+    res.send("로그인 실패..")
+    // res.status(500).json({ error: 'JWT토큰 발급에 실패했습니다.' });
+  });
 });
 
 
