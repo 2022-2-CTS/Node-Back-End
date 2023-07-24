@@ -7,21 +7,11 @@ var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({extended:false}));
 router.use(cors());
 router.use(bodyParser.json());
-
-// TEST: POST '/api/index/test'
-// router.post('/test', (req, res) => {
-//   // const code = req.body.code;
-//   // console.log(code);
-//   res.send("success")
-// })
-
-// TEST: GET '/api/index/test'
-// router.get('/test', (req, res) => {
-//   res.send("success")
-// })
+const axios = require('axios');
 
 router.post('/test', (req, res) => {
   const loginCode = req.body.code;
+  console.log(loginCode);
 
   const details = {
     grant_type: 'authorization_code',
