@@ -24,7 +24,7 @@ jobs: # Github Actions 감지 후 할 일
           password: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.EC2_SSH_PORT }}
           script: |
-            pm2 stop 0
+            pm2 delete 0
             cd ~/BusanCulture/backend
             git pull
             npm install
