@@ -10,8 +10,13 @@ router.use(bodyParser.json());
 
 // TEST: POST '/api/index/test'
 router.post('/test', (req, res) => {
-  const code = req.body.code;
-  console.log(code);
+  // const code = req.body.code;
+  // console.log(code);
+  res.send("success")
+})
+
+// TEST: GET '/api/index/test'
+router.get('/test', (req, res) => {
   res.send("success")
 })
 
