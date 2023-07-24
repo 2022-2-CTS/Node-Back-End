@@ -15,7 +15,7 @@ router.use(bodyParser.json());
 //   res.send("success")
 // })
 
-// // TEST: GET '/api/index/test'
+// TEST: GET '/api/index/test'
 // router.get('/test', (req, res) => {
 //   res.send("success")
 // })
