@@ -9,6 +9,7 @@ router.use(cors());
 router.use(bodyParser.json());
 const axios = require('axios');
 const { response } = require('express');
+const jwt = require('jsonwebtoken')
 
 
 //카카오 로그인 구현부
@@ -104,5 +105,27 @@ router.post('/naverLogin', (req, res) =>  {
   });
 });
 
+
+//구글 로그인 구현부
+router.post('/googleLogin', (req, res) => {
+  const credential = req.body.credentialCode
+  const clientId = req.body.clientIdCode
+
+  console.log(credential)
+  console.log(clientId)
+  
+  const decodedToken = jwt.decode(credential, {complete : true});
+
+  console.log(decodedToken);
+
+  if (decodedToken.payload.aud !== clientId){
+    console.log('Invalid client ID.');
+    res.send("로그인 실패..")
+    return;
+  }else{
+    res.send("로그인 성공!!")
+  }
+      
+})
 
 module.exports = router;
