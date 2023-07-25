@@ -19,6 +19,12 @@ router.post('/login', (req, res) => {
   console.log(id, pw)
 })
 
+router.post('/validCheck', (req, res) => {
+  const validId = req.body.sendValidId;
+
+  console.log(validId);
+})
+
 //카카오 로그인 구현부
 router.post('/test', (req, res) => {
   const loginCode = req.body.code;
