@@ -9,8 +9,25 @@ router.use(cors());
 router.use(bodyParser.json());
 const axios = require('axios');
 const { response } = require('express');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const maria = require('../database/connect/maria');
 
+router.post('/signup', function(req, res) {
+  const ID = req.body.sendId;
+  const PW = req.body.sendPw;
+  var sql = 'INSERT INTO user (ID, PW) VALUES (?, ?);';
+
+  console.log(ID, PW);
+  maria.query(sql, [ID, PW], function(err, rows, fields){
+    if(!err) {
+      // res.send(rows);
+      console.log("되는거야 뭐야");
+      console.log(rows);
+    }else{
+      console.log("error : ", err);
+    }
+  })
+})
 
 router.post('/login', (req, res) => {
   const id = req.body.sendId;
@@ -21,8 +38,23 @@ router.post('/login', (req, res) => {
 
 router.post('/validCheck', (req, res) => {
   const validId = req.body.sendValidId;
-
   console.log(validId);
+
+  var sql = 'SELECT ID FROM user WHERE ID = ?';
+
+  maria.query(sql, validId, function(err, rows, fields){
+    if(!err){
+      console.log(rows.length)
+      console.log(fields)
+      if (rows.length == 0){
+        res.send("success")
+      }else{
+        res.send("fail")
+      }
+    }else{
+      console.log("error", err)
+    }
+  })
 })
 
 //카카오 로그인 구현부
