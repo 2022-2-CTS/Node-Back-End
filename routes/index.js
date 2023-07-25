@@ -12,6 +12,13 @@ const { response } = require('express');
 const jwt = require('jsonwebtoken')
 
 
+router.post('/login', (req, res) => {
+  const id = req.body.sendId;
+  const pw = req.body.sendPw;
+
+  console.log(id, pw)
+})
+
 //카카오 로그인 구현부
 router.post('/test', (req, res) => {
   const loginCode = req.body.code;
