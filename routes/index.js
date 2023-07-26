@@ -12,6 +12,8 @@ const { response } = require('express');
 const jwt = require('jsonwebtoken');
 const maria = require('../database/connect/maria');
 
+const secretKey = 'culture';
+
 router.post('/signup', function(req, res) {
   const ID = req.body.sendId;
   const PW = req.body.sendPw;
@@ -43,7 +45,8 @@ router.post('/login', (req, res) => {
       if (rows.length == 0){
         res.send("fail")
       }else{
-        res.send("success")
+        const token = jwt.sign({username : id}, secretKey, {expiresIn:'1h'})
+        res.json({token})
       }
     }else{
       console.log(err)
