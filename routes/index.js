@@ -34,6 +34,21 @@ router.post('/login', (req, res) => {
   const pw = req.body.sendPw;
 
   console.log(id, pw)
+
+  var sql = 'SELECT * FROM user WHERE ID = ? and PW = ?;';
+
+  maria.query(sql, [id, pw], function(err, rows, fields){
+    if(!err){
+      console.log(rows)
+      if (rows.length == 0){
+        res.send("fail")
+      }else{
+        res.send("success")
+      }
+    }else{
+      console.log(err)
+    }
+  })
 })
 
 router.post('/validCheck', (req, res) => {
