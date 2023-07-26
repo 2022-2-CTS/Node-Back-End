@@ -31,29 +31,6 @@ router.post('/signup', function(req, res) {
   })
 })
 
-router.post('/login', (req, res) => {
-  const id = req.body.sendId;
-  const pw = req.body.sendPw;
-
-  console.log(id, pw)
-
-  var sql = 'SELECT * FROM user WHERE ID = ? and PW = ?;';
-
-  maria.query(sql, [id, pw], function(err, rows, fields){
-    if(!err){
-      console.log(rows)
-      if (rows.length == 0){
-        res.send("fail")
-      }else{
-        const token = jwt.sign({username : id}, secretKey, {expiresIn:'1h'})
-        res.json({token})
-      }
-    }else{
-      console.log(err)
-    }
-  })
-})
-
 router.post('/validCheck', (req, res) => {
   const validId = req.body.sendValidId;
   console.log(validId);
@@ -71,6 +48,43 @@ router.post('/validCheck', (req, res) => {
       }
     }else{
       console.log("error", err)
+    }
+  })
+})
+
+router.post('/login', (req, res) => {
+  const id = req.body.sendId;
+  const pw = req.body.sendPw;
+
+  console.log(id, pw)
+
+  var sql = 'SELECT * FROM user WHERE ID = ? and PW = ?;';
+
+  maria.query(sql, [id, pw], function(err, rows, fields){
+    if(!err){
+      console.log(rows)
+      if (rows.length == 0){
+        res.send("fail")
+      }else{
+        const token = jwt.sign({id : id, pw : pw}, secretKey, {expiresIn:'1h'})
+        res.json({token})
+      }
+    }else{
+      console.log(err)
+    }
+  })
+})
+
+router.post('/alreadyLogined', (req, res) => {
+  const jwtData = req.body.validToken;
+  console.log(req.body.validToken);
+  jwt.verify(jwtData, secretKey, (err, decoded) => {
+    if (!err){
+      console.log(decoded);
+      res.send(decoded);
+    }else{
+      console.log('error : ', err);
+      res.send(err);
     }
   })
 })
