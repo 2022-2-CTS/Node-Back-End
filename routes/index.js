@@ -24,8 +24,8 @@ router.post('/signup', function(req, res) {
   console.log(ID, PW);
   maria.query(sql, [ID, PW], function(err, rows, fields){
     if(!err) {
-      // res.send(rows);
       console.log("되는거야 뭐야");
+      res.send("가입완료");
       console.log(rows);
     }else{
       console.log("error : ", err);
