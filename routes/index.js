@@ -12,6 +12,8 @@ const { response } = require('express');
 const jwt = require('jsonwebtoken');
 const maria = require('../database/connect/maria');
 
+const crypto = require('crypto-js');
+
 const secretKey = 'culture';
 
 router.post('/signup', function(req, res) {
@@ -55,19 +57,31 @@ router.post('/validCheck', (req, res) => {
 router.post('/login', (req, res) => {
   const id = req.body.sendId;
   const pw = req.body.sendPw;
+  
+  // const bytes = crypto.AES.encrypt(pw, 'culture').toString();
+  // console.log('originalbytes = ', bytes);
+  const originalPw = crypto.AES.decrypt(pw, 'culture').toString(crypto.enc.Utf8);
+  console.log('originalPw = ', originalPw);
 
-  console.log(id, pw)
+  // console.log(id, pw)
 
-  var sql = 'SELECT * FROM user WHERE ID = ? and PW = ?;';
+  var sql = 'SELECT * FROM user WHERE ID = ?';
 
-  maria.query(sql, [id, pw], function(err, rows, fields){
+  maria.query(sql, [id], function(err, rows, fields){
     if(!err){
-      console.log(rows)
+      // console.log(rows[0].PW)
+      // const bytesInDB = crypto.AES.encrypt(rows[0].PW, 'culture').toString();
       if (rows.length == 0){
         res.send("fail")
       }else{
-        const token = jwt.sign({id : id, pw : pw}, secretKey, {expiresIn:'1h'})
-        res.json({token})
+        const originalPwInDB = crypto.AES.decrypt(rows[0].PW, 'culture').toString(crypto.enc.Utf8);
+        console.log(originalPwInDB)
+        console.log("제발!!")
+        if (originalPw == originalPwInDB){
+          console.log("우와!! 성공!!")
+          const token = jwt.sign({id : id}, secretKey, {expiresIn:'1h'})
+          res.json({token})
+        }
       }
     }else{
       console.log(err)
