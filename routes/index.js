@@ -16,6 +16,7 @@ const crypto = require('crypto-js');
 
 const secretKey = 'culture';
 
+//회원가입 부분
 router.post('/signup', function(req, res) {
   const ID = req.body.sendId;
   const PW = req.body.sendPw;
@@ -33,6 +34,7 @@ router.post('/signup', function(req, res) {
   })
 })
 
+//회원가입 유효 아이디 확인 부분
 router.post('/validCheck', (req, res) => {
   const validId = req.body.sendValidId;
   console.log(validId);
@@ -54,6 +56,7 @@ router.post('/validCheck', (req, res) => {
   })
 })
 
+// 앱 로그인 기능
 router.post('/login', (req, res) => {
   const id = req.body.sendId;
   const pw = req.body.sendPw;
@@ -89,6 +92,7 @@ router.post('/login', (req, res) => {
   })
 })
 
+//이미 로그인 된 유저인지 확인하는 부분
 router.post('/alreadyLogined', (req, res) => {
   const jwtData = req.body.validToken;
   console.log(req.body.validToken);
@@ -104,7 +108,10 @@ router.post('/alreadyLogined', (req, res) => {
 })
 
 //카카오 로그인 구현부
-router.post('/test', (req, res) => {
+
+var kakaoAccessToken = ''
+
+router.post('/kakaoLogin', (req, res) => {
   const loginCode = req.body.code;
   console.log(loginCode);
 
@@ -120,11 +127,12 @@ router.post('/test', (req, res) => {
     url: `https://kauth.kakao.com/oauth/token?grant_type=${grantType}&client_id=${clientId}&redirect_uri=${redirectUri}&code=${code}`,
     headers: {
       'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-    },
-  })
+      },
+    })
     .then((response) => {
       console.log(JSON.stringify(response.data));
-      const {access_token} = response.data
+      const {access_token} = response.data;
+      kakaoAccessToken = access_token;
       axios.post(
           `https://kapi.kakao.com/v2/user/me`,
           {},
@@ -135,18 +143,58 @@ router.post('/test', (req, res) => {
               }
           }
       ).then((response) => {
-          console.log('진짜진짜몬가몬가', response.data);
-          res.send("로그인 성공!!")
+          console.log('진짜진짜몬가몬가', response.data.id);
+          console.log('진짜진짜몬가몬가', response.data.kakao_account.profile.nickname);
+          
+          const kakaoId = (response.data.id).toString()
+          const kakaoNickname = response.data.kakao_account.profile.nickname;
+
+          var sqlFind = 'SELECT ID FROM kakaouser WHERE ID = ?;';
+          var sqlInsert = 'INSERT INTO kakaouser (ID, NICKNAME) VALUES (?, ?);';
+          maria.query(sqlFind, kakaoId, function(err, rows, fields){
+            if(!err){
+              console.log("여기야?")
+              console.log(rows.length)
+              console.log(fields)
+              if (rows.length == 0){
+                // res.send("success")
+                console.log("여기도?")
+                maria.query(sqlInsert, [kakaoId, kakaoNickname], function(err, rows, feilds){
+                  if(!err){
+                    console.log('디비에 저장 성공')
+                    console.log(rows)
+                  }else{
+                    console.log("Error : ", err)
+                  }
+                })
+              }else{
+                res.send("로그인 성공!!")
+              }
+            }else{
+              console.log("error", err)
+            }
+          })
+        }).catch((err) => {
+          console.log(err)
+        })
+          // res.send("로그인 성공!!")
       }).catch((Error)=>{
           console.log(Error);
       })
     })
-    .catch((error) => {
-      console.log('JWT토큰 발급에 실패했습니다.', error);
-      res.send("로그인 실패..")
-      // res.status(500).json({ error: 'JWT토큰 발급에 실패했습니다.' });
-    });
-});
+//     .catch((error) => {
+//       console.log('JWT토큰 발급에 실패했습니다.', error);
+//       res.send("로그인 실패..")
+//       // res.status(500).json({ error: 'JWT토큰 발급에 실패했습니다.' });
+//     });
+//   });
+// });
+
+router.get('/kakaoLoginToken', (req, res) => {
+  res.send(kakaoAccessToken)
+})
+  
+
 
 
 //네이버 로그인 구현부
