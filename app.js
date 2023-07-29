@@ -6,6 +6,10 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var appRouter = require('./routes/login/appLogin');
+var kakaoRouter = require('./routes/login/kakaoLogin');
+var naverRouter = require('./routes/login/naverLogin');
+var googleRouter = require('./routes/login/googleLogin');
 
 var app = express();
 // ADD: cors
@@ -27,6 +31,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/index', indexRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/login/appLogin', appRouter);
+app.use('/api/login/kakaoLogin', kakaoRouter);
+app.use('/api/login/naverLogin', naverRouter);
+app.use('/api/login/googleLogin', googleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
