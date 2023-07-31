@@ -20,7 +20,8 @@ var listP;
 var listC;
 var listM;
 var listE;
-
+const conn = require('../../database/connect/maria');
+var sql = 'INSERT INTO apiData (category, url, title,st_dt,ed_dt,showtime,price,poster) values (?,?,?,?,?,?,?,?)';
 
 //연극 데이터
 //total받기
@@ -44,7 +45,7 @@ async function getplaydata() {
   await console.log("연극 개수 : " + listP);
   var config = {
     method: 'get',
-    url: 'http://apis.data.go.kr/6260000/BusanCulturePlayDetailService/getBusanCulturePlayDetail?serviceKey=' +key+'&resultType=json' + '&numOfRows=' + listP,
+    url: 'http://apis.data.go.kr/6260000/BusanCulturePlayDetailService/getBusanCulturePlayDetail?serviceKey=' + key + '&resultType=json' + '&numOfRows=' + listP,
     headers: {
       'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
       "Accept-Encoding": "deflate, br"
@@ -67,6 +68,14 @@ async function getplaydata() {
           }
         }
         Playdata.push(tmpData);
+        var Par = [tmpData.category, tmpData.url, tmpData.data.title, tmpData.data.op_st_dt, tmpData.data.op_st_dt, tmpData.data.showtime, tmpData.data.price, 'null']
+        conn.query(sql, Par, function (err, rows, fields) {
+          if (!err) {
+            console.log("데이터 추가")
+          } else {
+            console.log(err)
+          }
+        })
       }
     })
 
@@ -217,5 +226,14 @@ getExhibit();
 getConcert();
 getMusical();
 getPlay();
+
+
+
+// var sql = 'INSERT INTO user (ID, PW) VALUES (?, ?);';
+// maria.query(sql, [ID, PW], function(err, fields){
+//   if(err) {
+//     console.log("error : ", err);
+//   }
+// })
 
 module.exports = router;
