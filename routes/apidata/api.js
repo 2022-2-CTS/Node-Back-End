@@ -70,9 +70,7 @@ async function getplaydata() {
         Playdata.push(tmpData);
         var Par = [tmpData.category, tmpData.url, tmpData.data.title, tmpData.data.op_st_dt, tmpData.data.op_st_dt, tmpData.data.showtime, tmpData.data.price, 'null']
         conn.query(sql, Par, function (err, rows, fields) {
-          if (!err) {
-            console.log("데이터 추가")
-          } else {
+          if (err) {
             console.log(err)
           }
         })
