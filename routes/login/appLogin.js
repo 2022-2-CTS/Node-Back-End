@@ -51,9 +51,9 @@ router.post('/validCheck', (req, res) => {
         console.log(rows.length)
         console.log(fields)
         if (rows.length == 0){
-        res.send("success")
+            res.send("success")
         }else{
-        res.send("fail")
+            res.send("fail")
         }
     }else{
         console.log("error", err)
@@ -79,24 +79,24 @@ router.post('/login', (req, res) => {
     var sql = 'SELECT * FROM user WHERE ID = ?';
 
     maria.query(sql, [id], function(err, rows, fields){
-    if(!err){
-        // console.log(rows[0].PW)
-        // const bytesInDB = crypto.AES.encrypt(rows[0].PW, 'culture').toString();
-        if (rows.length == 0){
-        res.send("fail")
+        if(!err){
+            // console.log(rows[0].PW)
+            // const bytesInDB = crypto.AES.encrypt(rows[0].PW, 'culture').toString();
+            if (rows.length == 0){
+                res.send("fail")
+            }else{
+                const originalPwInDB = crypto.AES.decrypt(rows[0].PW, 'culture').toString(crypto.enc.Utf8);
+                console.log(originalPwInDB)
+                console.log("제발!!")
+                if (originalPw == originalPwInDB){
+                    console.log("우와!! 성공!!")
+                    const token = jwt.sign({id : id}, secretKey, {expiresIn:'1h'})
+                    res.json({token})
+                }
+            }
         }else{
-        const originalPwInDB = crypto.AES.decrypt(rows[0].PW, 'culture').toString(crypto.enc.Utf8);
-        console.log(originalPwInDB)
-        console.log("제발!!")
-        if (originalPw == originalPwInDB){
-            console.log("우와!! 성공!!")
-            const token = jwt.sign({id : id}, secretKey, {expiresIn:'1h'})
-            res.json({token})
+            console.log(err)
         }
-        }
-    }else{
-        console.log(err)
-    }
     })
 })
 
@@ -105,17 +105,17 @@ router.post('/login', (req, res) => {
 //jwt의 정보를 분석해서 유효시간이 다 되지 않았다면 자동로그인
 //아니면 로그아웃의 절차를 밟음.
 router.post('/alreadyLogined', (req, res) => {
-const jwtData = req.body.validToken;
-console.log(req.body.validToken);
-jwt.verify(jwtData, secretKey, (err, decoded) => {
-    if (!err){
-    console.log(decoded);
-    res.send(decoded);
-    }else{
-    console.log('error : ', err);
-    res.send(err);
-    }
-})
+    const jwtData = req.body.validToken;
+    console.log(req.body.validToken);
+    jwt.verify(jwtData, secretKey, (err, decoded) => {
+        if (!err){
+            console.log(decoded);
+            res.send(decoded);
+        }else{
+            console.log('error : ', err);
+            res.send(err);
+        }
+    })
 })
 
 module.exports = router;

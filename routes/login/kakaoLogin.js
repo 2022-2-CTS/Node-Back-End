@@ -22,22 +22,22 @@ const secretKey = 'culture';
 var kakaoAccessToken = ''
 
 router.post('/kakaoLogin', (req, res) => {
-const loginCode = req.body.code;
-console.log(loginCode);
+    const loginCode = req.body.code;
+    console.log(loginCode);
 
 
-const grantType = 'authorization_code'
-const clientId = 'e6c2fe139670b147caaf750b558a4750' // REST API KEY
-const redirectUri = 'http://localhost:3000/kakao-login'
-const code = loginCode
+    const grantType = 'authorization_code'
+    const clientId = 'e6c2fe139670b147caaf750b558a4750' // REST API KEY
+    const redirectUri = 'http://localhost:3000/kakao-login'
+    const code = loginCode
 
 
-axios({
-    method: 'post',
-    url: `https://kauth.kakao.com/oauth/token?grant_type=${grantType}&client_id=${clientId}&redirect_uri=${redirectUri}&code=${code}`,
-    headers: {
-    'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-    },
+    axios({
+        method: 'post',
+        url: `https://kauth.kakao.com/oauth/token?grant_type=${grantType}&client_id=${clientId}&redirect_uri=${redirectUri}&code=${code}`,
+        headers: {
+        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+        },
     })
     .then((response) => {
     console.log(JSON.stringify(response.data));
@@ -62,27 +62,31 @@ axios({
         var sqlFind = 'SELECT ID FROM kakaouser WHERE ID = ?;';
         var sqlInsert = 'INSERT INTO kakaouser (ID, NICKNAME) VALUES (?, ?);';
         maria.query(sqlFind, kakaoId, function(err, rows, fields){
-        if(!err){
-            console.log("여기야?")
-            console.log(rows.length)
-            console.log(fields)
-            if (rows.length == 0){
-            // res.send("success")
-            console.log("여기도?")
-            maria.query(sqlInsert, [kakaoId, kakaoNickname], function(err, rows, feilds){
-                if(!err){
-                console.log('디비에 저장 성공')
+            if(!err){
+                console.log("여기야?")
                 console.log(rows)
+                console.log(fields)
+                if (rows.length == 0){
+
+                    // res.send("success")
+                    console.log("여기도?")
+                    console.log(rows)
+                    maria.query(sqlInsert, [kakaoId, kakaoNickname], function(err, rows, feilds){
+                        if(!err){
+                            console.log('디비에 저장 성공')
+                            console.log(rows)
+                        }else{
+                            console.log("Error : ", err)
+                        }
+                    })
                 }else{
-                console.log("Error : ", err)
+                    const token = jwt.sign({id:kakaoNickname}, secretKey, {expiresIn:'1h'})
+                    const data = "로그인 성공!!"
+                    res.send({token, data, kakaoNickname})
                 }
-            })
             }else{
-            res.send("로그인 성공!!")
+                console.log("error", err)
             }
-        }else{
-            console.log("error", err)
-        }
         })
     }).catch((err) => {
         console.log(err)
@@ -93,8 +97,19 @@ axios({
     })
 })
 
-router.get('/kakaoLoginToken', (req, res) => {
-    res.send(kakaoAccessToken)
+router.post('/alreadyLoginedKakao', (req, res) => {
+    const jwtData = req.body.kakaoAccessToken;
+    console.log(req.body.kakaoAccessToken);
+    jwt.verify(jwtData, secretKey, (err, decoded) => {
+        if (!err){
+            console.log(decoded);
+            res.send(decoded);
+        }else{
+            console.log('error : ', err);
+            res.send(err);
+        }
+    })
 })
+
 
 module.exports = router;
