@@ -3,43 +3,141 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 var bodyParser = require('body-parser')
 var router = express.Router();
-
-app.use(bodyParser.json())
+router.use(bodyParser.json());
 
 const fs = require('fs');
 const axios = require('axios');
 
 const conn = require('../../database/connect/maria');
-var sql = 'SELECT * FROM apiData';
+var sql = 'SELECT * FROM EVENT';
 
-let Data = [];
+let playData = [];
+let concertData = [];
+let musicalData = [];
+let exhibitionData = [];
 
-conn.query(sql, function (err, rows, fields) { //rows
-    if (err) {
-        console.log(err)
-    }
-    else {
-        for (let i = 0; i < rows.length; i++) {
-            let event = {
-                title: rows[i].title, // 행사 제목
-                location: rows[i].location, // 행사 장소(주소)
-                startDate: rows[i].st_dt, // 행사 시작일
-                endDate: rows[i].ed_dt, // 행사 종료일
-                time: rows[i].showtime, // 행사 시간(duration)
-                price: rows[i].price, // 행사 가격
-                src: rows[i].poster // 행사 포스터 이미지 경로 url
-            }
-            Data.push(event);
+router.get( '/musicals', (req, res) => {
+
+    conn.query(sql, function (err, rows, fields) { //rows
+
+        if (err) {
+            console.log(err)
         }
-        //console.log(Data)
-        Data=JSON.stringify(Data)
-        fs.writeFileSync('./routes/event/json/getData_json.json', Data);
-    }
+        else {
+            for ( let i = 0; i < rows.length; i++ ) {
+
+                if ( rows[i].category == "뮤지컬" ) {
+
+                    let event = {
+                        title: rows[i].title, // 행사 제목
+                        location: rows[i].location, // 행사 장소(주소)
+                        startDate: rows[i].st_dt, // 행사 시작일
+                        endDate: rows[i].ed_dt, // 행사 종료일
+                        time: rows[i].showtime, // 행사 시간(duration)
+                        price: rows[i].price, // 행사 가격
+                        src: rows[i].poster // 행사 포스터 이미지 경로 url
+                    }
+                    musicalData.push(event);
+                }
+            }
+            musicalData = JSON.stringify(musicalData)
+
+            res.send(musicalData)
+        }
+    })
 })
-var result= require('./routes/event/json/getData_json.json');
-var ss='성공'
-router.get('/get', (req, res) => {
-    res.send(ss)
+
+router.get( '/exhibitions', (req, res) => {
+
+    conn.query(sql, function (err, rows, fields) { //rows
+
+        if (err) {
+            console.log(err)
+        }
+        else {
+            for ( let i = 0; i < rows.length; i++ ) {
+
+                if ( rows[i].category == "전시" ) {
+
+                    let event = {
+                        title: rows[i].title, // 행사 제목
+                        location: rows[i].location, // 행사 장소(주소)
+                        startDate: rows[i].st_dt, // 행사 시작일
+                        endDate: rows[i].ed_dt, // 행사 종료일
+                        time: rows[i].showtime, // 행사 시간(duration)
+                        price: rows[i].price, // 행사 가격
+                        src: rows[i].poster // 행사 포스터 이미지 경로 url
+                    }
+                    exhibitionData.push(event);
+                }
+            }
+            exhibitionData = JSON.stringify(exhibitionData)
+            
+            res.send(exhibitionData)
+        }
+    })
+})
+
+router.get( '/concerts', (req, res) => {
+
+    conn.query(sql, function (err, rows, fields) { //rows
+
+        if (err) {
+            console.log(err)
+        }
+        else {
+            for ( let i = 0; i < rows.length; i++ ) {
+
+                if ( rows[i].category == "콘서트" ) {
+
+                    let event = {
+                        title: rows[i].title, // 행사 제목
+                        location: rows[i].location, // 행사 장소(주소)
+                        startDate: rows[i].st_dt, // 행사 시작일
+                        endDate: rows[i].ed_dt, // 행사 종료일
+                        time: rows[i].showtime, // 행사 시간(duration)
+                        price: rows[i].price, // 행사 가격
+                        src: rows[i].poster // 행사 포스터 이미지 경로 url
+                    }
+                    concertData.push(event);
+                }
+            }
+            concertData = JSON.stringify(concertData)
+            
+            res.send(concertData)
+        }
+    })
+})
+
+router.get( '/plays', (req, res) => {
+
+    conn.query(sql, function (err, rows, fields) { //rows
+
+        if (err) {
+            console.log(err)
+        }
+        else {
+            for ( let i = 0; i < rows.length; i++ ) {
+
+                if ( rows[i].category == "연극" ) {
+
+                    let event = {
+                        title: rows[i].title, // 행사 제목
+                        location: rows[i].location, // 행사 장소(주소)
+                        startDate: rows[i].st_dt, // 행사 시작일
+                        endDate: rows[i].ed_dt, // 행사 종료일
+                        time: rows[i].showtime, // 행사 시간(duration)
+                        price: rows[i].price, // 행사 가격
+                        src: rows[i].poster // 행사 포스터 이미지 경로 url
+                    }
+                    playData.push(event);
+                }
+            }
+            playData = JSON.stringify(playData)
+            
+            res.send(playData)
+        }
+    })
 })
 
 module.exports = router;
