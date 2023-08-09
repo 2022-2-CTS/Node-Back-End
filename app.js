@@ -10,7 +10,8 @@ var appRouter = require('./routes/login/appLogin');
 var kakaoRouter = require('./routes/login/kakaoLogin');
 var naverRouter = require('./routes/login/naverLogin');
 var googleRouter = require('./routes/login/googleLogin');
-var apiRouter = require('./routes/apidata/getapi')
+var apiRouter = require('./routes/apidata/getapi');
+var postRouter = require('./routes/post/post');
 
 var app = express();
 // ADD: cors
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/api/post',postRouter);
 app.use('/api/event',apiRouter);
 app.use('/api/index', indexRouter);
 app.use('/api/users', usersRouter);
