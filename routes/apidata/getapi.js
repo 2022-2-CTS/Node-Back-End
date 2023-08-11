@@ -11,10 +11,6 @@ const axios = require('axios');
 const conn = require('../../database/connect/maria');
 var sql = 'SELECT * FROM EVENT';
 
-let playData = [];
-let concertData = [];
-let musicalData = [];
-let exhibitionData = [];
 
 router.get( '/musicals', (req, res) => {
 
@@ -24,6 +20,8 @@ router.get( '/musicals', (req, res) => {
             console.log(err)
         }
         else {
+            let musicalData = [];
+
             for ( let i = 0; i < rows.length; i++ ) {
 
                 if ( rows[i].category == "뮤지컬" ) {
@@ -55,6 +53,8 @@ router.get( '/exhibitions', (req, res) => {
             console.log(err)
         }
         else {
+            let exhibitionData = [];
+
             for ( let i = 0; i < rows.length; i++ ) {
 
                 if ( rows[i].category == "전시" ) {
@@ -86,6 +86,8 @@ router.get( '/concerts', (req, res) => {
             console.log(err)
         }
         else {
+            let concertData = [];
+
             for ( let i = 0; i < rows.length; i++ ) {
 
                 if ( rows[i].category == "콘서트" ) {
@@ -117,6 +119,8 @@ router.get( '/plays', (req, res) => {
             console.log(err)
         }
         else {
+            let playData = [];
+            
             for ( let i = 0; i < rows.length; i++ ) {
 
                 if ( rows[i].category == "연극" ) {
