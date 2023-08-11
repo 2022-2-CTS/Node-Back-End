@@ -23,7 +23,7 @@ const secretKey = 'culture';
 router.post('/signup', function(req, res) {
     const ID = req.body.sendId;
     const PW = req.body.sendPw;
-    var sql = 'INSERT INTO user (ID, PW) VALUES (?, ?);';
+    var sql = 'INSERT INTO USER (ID, PW) VALUES (?, ?);';
   
     console.log(ID, PW);
     maria.query(sql, [ID, PW], function(err, rows, fields){
@@ -44,7 +44,7 @@ router.post('/validCheck', (req, res) => {
     const validId = req.body.sendValidId;
     console.log(validId);
 
-    var sql = 'SELECT ID FROM user WHERE ID = ?';
+    var sql = 'SELECT ID FROM USER WHERE ID = ?';
 
     maria.query(sql, validId, function(err, rows, fields){
     if(!err){
@@ -76,7 +76,7 @@ router.post('/login', (req, res) => {
 
     // console.log(id, pw)
 
-    var sql = 'SELECT * FROM user WHERE ID = ?';
+    var sql = 'SELECT * FROM USER WHERE ID = ?';
 
     maria.query(sql, [id], function(err, rows, fields){
         if(!err){
