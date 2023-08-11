@@ -40,58 +40,58 @@ router.post('/kakaoLogin', (req, res) => {
         },
     })
     .then((response) => {
-    console.log(JSON.stringify(response.data));
-    const {access_token} = response.data;
-    kakaoAccessToken = access_token;
-    axios.post(
-        `https://kapi.kakao.com/v2/user/me`,
-        {},
-        {
-            headers:{
-                Authorization: `Bearer ${access_token}`,
-                "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-            }
-        }
-    ).then((response) => {
-        console.log('진짜진짜몬가몬가', response.data.id);
-        console.log('진짜진짜몬가몬가', response.data.kakao_account.profile.nickname);
-        
-        const kakaoId = (response.data.id).toString()
-        const kakaoNickname = response.data.kakao_account.profile.nickname;
-
-        var sqlFind = 'SELECT ID FROM kakaouser WHERE ID = ?;';
-        var sqlInsert = 'INSERT INTO kakaouser (ID, NICKNAME) VALUES (?, ?);';
-        maria.query(sqlFind, kakaoId, function(err, rows, fields){
-            if(!err){
-                console.log("여기야?")
-                console.log(rows)
-                console.log(fields)
-                if (rows.length == 0){
-
-                    // res.send("success")
-                    console.log("여기도?")
-                    console.log(rows)
-                    maria.query(sqlInsert, [kakaoId, kakaoNickname], function(err, rows, feilds){
-                        if(!err){
-                            console.log('디비에 저장 성공')
-                            console.log(rows)
-                        }else{
-                            console.log("Error : ", err)
-                        }
-                    })
-                }else{
-                    const token = jwt.sign({id:kakaoNickname}, secretKey, {expiresIn:'1h'})
-                    const data = "로그인 성공!!"
-                    res.send({token, data, kakaoNickname})
+        console.log(JSON.stringify(response.data));
+        const {access_token} = response.data;
+        kakaoAccessToken = access_token;
+        axios.post(
+            `https://kapi.kakao.com/v2/user/me`,
+            {},
+            {
+                headers:{
+                    Authorization: `Bearer ${access_token}`,
+                    "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
                 }
-            }else{
-                console.log("error", err)
             }
+        ).then((response) => {
+            console.log('진짜진짜몬가몬가', response.data.id);
+            console.log('진짜진짜몬가몬가', response.data.kakao_account.profile.nickname);
+            
+            const kakaoId = (response.data.id).toString()
+            const kakaoNickname = response.data.kakao_account.profile.nickname;
+
+            var sqlFind = 'SELECT ID FROM KAKAO WHERE ID = ?;';
+            var sqlInsert = 'INSERT INTO KAKAO (ID, NICKNAME) VALUES (?, ?);';
+            maria.query(sqlFind, kakaoId, function(err, rows, fields){
+                if(!err){
+                    console.log("여기야?")
+                    console.log(rows)
+                    console.log(fields)
+                    if (rows.length == 0){
+
+                        // res.send("success")
+                        console.log("여기도?")
+                        console.log(rows)
+                        maria.query(sqlInsert, [kakaoId, kakaoNickname], function(err, rows, feilds){
+                            if(!err){
+                                console.log('디비에 저장 성공')
+                                console.log(rows)
+                            }else{
+                                console.log("Error : ", err)
+                            }
+                        })
+                    }else{
+                        const token = jwt.sign({id:kakaoNickname}, secretKey, {expiresIn:'1h'})
+                        const data = "로그인 성공!!"
+                        res.send({token, data, kakaoNickname})
+                    }
+                }else{
+                    console.log("error", err)
+                }
+            })
+        }).catch((err) => {
+            console.log(err)
         })
-    }).catch((err) => {
-        console.log(err)
-    })
-        // res.send("로그인 성공!!")
+            // res.send("로그인 성공!!")
     }).catch((Error)=>{
         console.log(Error);
     })

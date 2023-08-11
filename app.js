@@ -9,9 +9,9 @@ var usersRouter = require('./routes/users');
 var appRouter = require('./routes/login/appLogin');
 var kakaoRouter = require('./routes/login/kakaoLogin');
 var naverRouter = require('./routes/login/naverLogin');
-var googleRouter = require('./routes/login/googleLogin');
 var apiRouter = require('./routes/apidata/getapi');
 var postRouter = require('./routes/post/post');
+var favoriteRouter = require('./routes/mydata/favorite');
 
 var app = express();
 // ADD: cors
@@ -35,10 +35,10 @@ app.use('/api/post',postRouter);
 app.use('/api/event',apiRouter);
 app.use('/api/index', indexRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/mydata/favorite', favoriteRouter)
 app.use('/api/login/appLogin', appRouter);
 app.use('/api/login/kakaoLogin', kakaoRouter);
 app.use('/api/login/naverLogin', naverRouter);
-app.use('/api/login/googleLogin', googleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

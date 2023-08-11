@@ -58,32 +58,34 @@ router.post('/naverLogin_', (req, res) =>  {
 
         console.log(naverId, naverNickname)
 
-        var sqlFind = 'SELECT ID FROM naveruser WHERE ID = ?;';
-        var sqlInsert = 'INSERT INTO naveruser (ID, NICKNAME) VALUES (?, ?);';
+        var sqlFind = 'SELECT ID FROM NAVER WHERE ID = ?;';
+        var sqlInsert = 'INSERT INTO NAVER (ID, NICKNAME) VALUES (?, ?);';
 
         maria.query(sqlFind, naverId, function(err, rows, feilds){
             if(!err){
-            if(rows.length == 0){
-                maria.query(sqlInsert, [naverId, naverNickname], function(err, rows, feilds){
-                if(!err){
-                    console.log('디비에 저장 성공')
-                    console.log(rows)
+                if(rows.length == 0){
+                    maria.query(sqlInsert, [naverId, naverNickname], function(err, rows, feilds){
+                        if(!err){
+                            console.log('디비에 저장 성공')
+                            console.log(rows)
+                        }else{
+                            console.log("insert error ", err)
+                        }
+                    })
                 }else{
-                    console.log("insert error ", err)
+                    const token = jwt.sign({id:naverNickname}, secretKey, {expiresIn:'1h'})
+                    const data = "로그인 성공!!"
+                    res.send({token, data, naverNickname})
                 }
-                })
             }else{
-                res.send("로그인 성공!!")
-            }
-            }else{
-            console.log("find error", err)
+                console.log("find error", err)
             }
         })
         // res.send("로그인 성공!!")
         }).catch((Error) => {
-        res.send("진짜루..?")
-        console.log(Error);
-        res.send(Error)
+            res.send("진짜루..?")
+            console.log(Error);
+            res.send(Error)
         })
     })
     .catch((error) => {
@@ -93,34 +95,18 @@ router.post('/naverLogin_', (req, res) =>  {
     });
 });
 
-router.get('/naverLoginToken', (req, res) => {
-  res.send(naverAccessToken)
-})
-
-router.post('/naverLoginTokenAccess', (req, res) => {
-    const naverToken = req.body.naverAccessToken
-    console.log(naverToken)
-    axios.get(
-        "https://openapi.naver.com/v1/nid/me",
-        {
-        headers:{
-            Authorization : `Bearer ${naverToken}`,
-        },
-        }
-    )
-    .then((response) => {
-        console.log(response.data); // 서버 응답의 데이터를 출력합니다.
-        if(response.data.code != -401){
-        console.log("나한테")
-        res.send('valid')
+router.post('/alreadyLoginedNaver', (req, res) => {
+    const jwtData = req.body.naverAccessToken
+    console.log(req.body.naverAccessToken);
+    jwt.verify(jwtData, secretKey, (err, decoded) => {
+        if(!err){
+            console.log(decoded);
+            res.send(decoded);
         }else{
-        console.log("왜이래")
-        res.send('invalid')
+            console.log('error : ', err);
+            res.send(err);
         }
     })
-    .catch((err) => {
-        console.log("err", err); // 오류가 발생한 경우 오류를 출력합니다.
-    });
 })
 
 module.exports = router;

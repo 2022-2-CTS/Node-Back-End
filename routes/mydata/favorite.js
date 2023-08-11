@@ -10,7 +10,7 @@ router.use(bodyParser.json());
 const axios = require('axios');
 const { response } = require('express');
 const jwt = require('jsonwebtoken');
-const maria = require('../database/connect/maria');
+const maria = require('../../database/connect/maria');
 
 const crypto = require('crypto-js');
 
