@@ -14,6 +14,33 @@ const maria = require('../../database/connect/maria');
 
 const crypto = require('crypto-js');
 
+router.post("/checkNickname", (req, res) => {
+    const registerType = req.body.registerType;
+    const userId = req.body.userId;
+
+    var sql = ""
+
+    if(registerType == "USER"){
+        sql = "SELECT APPNICKNAME FROM " + registerType + " WHERE ID = " + '"' +  userId + '"'; 
+    }
+    else{
+        sql = "SELECT APPNICKNAME FROM " + registerType + " WHERE NICKNAME = " + '"' + userId + '"'; 
+    }
+    
+    maria.query(sql, function(err, rows, fields){
+        if(!err){
+            console.log(rows[0].APPNICKNAME);
+            if(rows[0].APPNICKNAME != null){
+                res.send("exist");
+            }else{
+                res.send("not exist");
+            }
+        }else{
+            console.log(err);
+        }
+    })
+})
+
 router.post("/setOwnNickname", (req, res) => {
 
     const registerType = req.body.registerType;
