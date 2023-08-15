@@ -11,18 +11,18 @@ const axios = require('axios');
 const conn = require('../../database/connect/maria');
 
 //작성한 글 DB 저장
-router.post('/write', (req, res) => {
+router.post('/write', (req) => {
 
-    var sql = 'INSERT INTO POST (ID, TITLE, DATE, LOCATION, TAG, CONTENT) values ( ?, ?, ?, ?, ?, ? )';
-
-    var data = [
-        req.userId,
-        req.title,
-        req.date,
-        req.location,
-        req.tag,
-        req.contant,
+    const data = [
+        req.body.Writedata.userId,
+        req.body.Writedata.title,
+        req.body.Writedata.date,
+        req.body.Writedata.location,
+        req.body.Writedata.tag,
+        req.body.Writedata.content,
     ]
+    console.log(data)
+    var sql = 'INSERT INTO POST (ID, TITLE, DATE, LOCATION, TAG, CONTENT) values ( ?, ?, ?, ?, ?, ? )';
 
     conn.query(sql, data, function (err, rows) {
         if (err) {
