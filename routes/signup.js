@@ -66,7 +66,7 @@ router.post('/check/id/valid', (req, res) => {
 
 //닉네임 설정 기능
 //닉네임이 null인지 아닌지 확인
-router.post("/nickname/check", (req, res) => {
+router.post("/nickname/status", (req, res) => {
     const registerType = req.body.registerType;
     const userId = req.body.userId;
 
@@ -94,7 +94,7 @@ router.post("/nickname/check", (req, res) => {
 })
 
 //닉네임이 null인 경우 새롭게 저장
-router.post("/nickname/set", (req, res) => {
+router.post("/nickname", (req, res) => {
 
     const registerType = req.body.registerType;
     const userId = req.body.userId;
