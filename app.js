@@ -4,8 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
 var apiRouter = require('./routes/apidata/getapi');
 var postRouter = require('./routes/post/post');
 var favoriteRouter = require('./routes/mydata/favorite');
@@ -35,8 +34,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/post',postRouter);
 app.use('/api/event',apiRouter);
-app.use('/api/index', indexRouter);
-app.use('/api/users', usersRouter);
 app.use('/api/mydata/favorite', favoriteRouter);
 
 //로그인 라우터
