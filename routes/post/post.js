@@ -40,28 +40,28 @@ router.get('/lists', (req, res) => {
 
     var sql = 'SELECT * FROM POST';
 
-    conn.query(sql, data, function (err, rows) {
+    conn.query(sql, function (err, rows) {
         if (err) {
             console.log(err)
         }
         else{
+
             let writeData = [];
 
             for( let i = 0; i < rows.length; i++ )
             {
                 let Data = {
                     idx:i, //글 인덱스 생성
-                    title: rows[i].title, // 제목
-                    location: rows[i].location, // 행사 장소(주소)
-                    date: rows[i].date, // 작성 일자
-                    tag: rows[i].tag, // 태그
-                    content:rows[i].content //글내용
+                    title: rows[i].TITLE, // 제목
+                    location: rows[i].LOCATION, // 행사 장소(주소)
+                    date: rows[i].DATE, // 작성 일자
+                    tag: rows[i].TAG, // 태그
+                    content:rows[i].CONTENT //글내용
 
                 }
                 writeData.push(Data);
             }
             writeData = JSON.stringify(writeData)
-
             res.send(writeData)
         }
     })
