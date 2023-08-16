@@ -6,13 +6,13 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var appRouter = require('./routes/login/appLogin');
-var kakaoRouter = require('./routes/login/kakaoLogin');
-var naverRouter = require('./routes/login/naverLogin');
 var apiRouter = require('./routes/apidata/getapi');
 var postRouter = require('./routes/post/post');
 var favoriteRouter = require('./routes/mydata/favorite');
-var nicknameRouter = require('./routes/mydata/nickname');
+
+//로그인 라우터
+var loginRouter = require('./routes/login');
+var signupRouter = require("./routes/signup")
 
 
 var app = express();
@@ -38,10 +38,12 @@ app.use('/api/event',apiRouter);
 app.use('/api/index', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/mydata/favorite', favoriteRouter);
-app.use('/api/mydata/nickname', nicknameRouter);
-app.use('/api/login/appLogin', appRouter);
-app.use('/api/login/kakaoLogin', kakaoRouter);
-app.use('/api/login/naverLogin', naverRouter);
+
+//로그인 라우터
+app.use('/api/login/', loginRouter);
+app.use('/api/login/kakao', loginRouter);
+app.use('/api/login/naver', loginRouter);
+app.use('/api/signup', signupRouter);
 
 
 // catch 404 and forward to error handler
