@@ -21,8 +21,8 @@ router.post('/write', (req) => {
         req.body.Writedata.tag,
         req.body.Writedata.content,
     ]
-    console.log(data)
-    var sql = 'INSERT INTO POST (ID, TITLE, DATE, LOCATION, TAG, CONTENT) values ( ?, ?, ?, ?, ?, ? )';
+
+    const sql = 'INSERT INTO POST (ID, TITLE, DATE, LOCATION, TAG, CONTENT) values ( ?, ?, ?, ?, ?, ? )';
 
     conn.query(sql, data, function (err, rows) {
         if (err) {
@@ -38,7 +38,7 @@ router.post('/write', (req) => {
 //DB에 작성된 글 가져오기
 router.get('/lists', (req, res) => {
 
-    var sql = 'SELECT * FROM POST';
+    const sql = 'SELECT * FROM POST';
 
     conn.query(sql, function (err, rows) {
         if (err) {
@@ -59,8 +59,10 @@ router.get('/lists', (req, res) => {
                     content:rows[i].CONTENT //글내용
 
                 }
+                
                 writeData.push(Data);
             }
+
             writeData = JSON.stringify(writeData)
             res.send(writeData)
         }

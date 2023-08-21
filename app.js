@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 
-var apiRouter = require('./routes/apidata/getapi');
+var apiRouter = require('./routes/event/list');
 var postRouter = require('./routes/post/post');
 var favoriteRouter = require('./routes/mydata/favorite');
 
@@ -33,7 +33,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/post',postRouter);
-app.use('/api/event',apiRouter);
+app.use('/api/event',eventsRouter);
 app.use('/api/mydata/favorite', favoriteRouter);
 
 //로그인 라우터

@@ -8,14 +8,17 @@ app.use(bodyParser.json())
 
 const conn = require('../../database/connect/maria');
 
-const val =['concert','musical','play','exhibit']
+const category =['concert','musical','play','exhibit']
 
-var sql = 'INSERT INTO apiData (category, url, title,st_dt,ed_dt,showtime,price,poster,location) values (?,?,?,?,?,?,?,?,?)';
+const sql = 'INSERT INTO apiData (category, url, title,st_dt,ed_dt,showtime,price,poster,location) values (?,?,?,?,?,?,?,?,?)';
 
-for(let j=0;j<val.length;j++){
-  var tmpData = require('../event/json/'+val[j]+'_json.json');
-  for (let i = 0; i < tmpData.length; i++) {
-    var Par = [
+for( let j=0; j<val.length; j++ ) {
+
+  let tmpData = require('../event/json/'+val[j]+'_json.json');
+
+  for ( let i = 0; i < tmpData.length; i++ ) {
+    
+    let data = [
       tmpData[i].category, 
       tmpData[i].url, 
       tmpData[i].data.title, 
@@ -25,7 +28,8 @@ for(let j=0;j<val.length;j++){
       tmpData[i].data.price, 
       tmpData[i].data.imgSrc, 
       tmpData[i].data.location]
-    conn.query(sql, Par, function (err, rows, fields) {
+
+    conn.query(sql, data, function (err, rows, fields) {
       if (err) {
         console.log(err)
       }
