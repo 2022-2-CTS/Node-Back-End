@@ -30,7 +30,11 @@ const secretKey = 'culture';
 router.post('/', (req, res) => {
     const id = req.body.userId;
     const pw = req.body.userPw;
-    
+
+    if(id == ""){
+        res.status(400).json({status:"success", data:{msg:"아이디, 비밀번호를 다시 확인해주세요."}})
+        return
+    }
     //culture은 암호해독에 필요한 키 이다. 나중에 수정과 동시에 숨겨야 함
     const originalPw = crypto.AES.decrypt(pw, 'culture').toString(crypto.enc.Utf8);
 
@@ -38,18 +42,17 @@ router.post('/', (req, res) => {
 
     maria.query(sql, [id], function(err, rows, fields){
         if(!err){
-            if (rows.length == 0){
-                res.status(400).json({status:"fail", data:{msg:"아이디, 비밀번호를 다시 확인해주세요."}})
-            }else{
+            if (rows.length != 0){
                 const originalPwInDB = crypto.AES.decrypt(rows[0].PW, 'culture').toString(crypto.enc.Utf8);
                 if (originalPw == originalPwInDB){
                     console.log("우와!! 성공!!")
                     const token = jwt.sign({id : id}, secretKey, {expiresIn:'1h'})
-                    res.status(200).json({status:"success", data:token})
+                    res.status(200).json({status:"success", data:{result:"true", token:token}})
                 }
+            }else{
+                res.status(200).json({status:"success", data:{result:"false", msg:"로그인에 실패했습니다."}})
             }
         }else{
-            res.status(400).json({status:"fail", data:{msg:"아이디, 비밀번호를 다시 확인해주세요."}})
             res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })
@@ -64,10 +67,9 @@ router.post('/status', (req, res) => {
     console.log(req.body.validToken);
     jwt.verify(jwtData, secretKey, (err, decoded) => {
         if (!err){
-            res.status(200).json({status:"success", data:null})
+            res.status(200).json({status:"success", data:{result:"true", id:decoded.id}})
         }else{
-            res.status(400).json({status:"fail", data:{msg:"만료된 토큰입니다."}});
-            res.status(500).json({status:"error", msg:"서버 오류 발생"});
+            res.status(200).json({status:"success", data:{result:"false"}});
         }
     })
 })

@@ -31,8 +31,7 @@ router.post('/', function(req, res) {
         if(!err) {
             res.status(200).json({status:"success", data:null});
         }else{
-            res.status(400).json({status:"fail", data:{msg:"회원가입에 실패했습니다. 다시 시도해주세요"}})
-            res.status(500).json({status:"error", msg:"서버 오류 발생"})
+            res.status(200).json({status:"success", msg:"서버 오류 발생"})
         }
     })
 })
@@ -47,15 +46,15 @@ router.post('/check/id/valid', (req, res) => {
     var sql = 'SELECT ID FROM USER WHERE ID = ?';
 
     maria.query(sql, validId, function(err, rows, fields){
-    if(!err){
-        if (rows.length == 0){
-            res.status(200).json({status:"success", data:null});
+        if(!err){
+            if (rows.length == 0){
+                res.status(200).json({status:"success", data:null});
+            }else{
+                res.status(200).json({status:"success", data:{msg:"중복된 아이디 입니다. 다시 시도해주세요"}})
+            }
         }else{
-            res.status(400).json({status:"fail", data:{msg:"중복된 아이디 입니다. 다시 시도해주세요"}})
+            res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
-    }else{
-        res.status(500).json({status:"error", msg:"서버 오류 발생"})
-    }
     })
 })
 
@@ -79,9 +78,9 @@ router.post("/nickname/status", (req, res) => {
         if(!err){
             if(rows[0].APPNICKNAME != null){
                 var nickname = rows[0].APPNICKNAME;
-                res.status(200).json({status:"success", data:nickname});
+                res.status(200).json({status:"success", data:{exist: "true", nickname : nickname}});
             }else{
-                res.status(400).json({status:"fail", data:{msg:"설정된 닉네임이 없습니다. 닉네임 설정으로 이동합니다."}})
+                res.status(200).json({status:"success", data:{exist: "false"}})
             }
         }else{
             res.status(500).json({status:"error", msg:"서버 오류 발생"})
@@ -106,9 +105,8 @@ router.post("/nickname", (req, res) => {
     }
     maria.query(sql, [nickname], function(err, rows, fields){
         if(!err){
-            res.status(200).json({status:"success", data:nickname});
+            res.status(200).json({status:"success", data:{nickname:nickname}});
         }else{
-            res.status(400).json({status:"fail", data:{msg:"닉네임 설정에 실패했습니다. 다시 시도해주세요."}})
             res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })
