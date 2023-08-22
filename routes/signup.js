@@ -23,18 +23,16 @@ const secretKey = 'culture';
 //데이터베이스에 저장함
 //이 부분에서 중복성 검사는 따로 하지 않음. 회원가입 절차 중 앞선 입력이 완료되고 검증이 된 경우에만 버튼이 활성화되기 때문
 router.post('/', function(req, res) {
-    const ID = req.body.sendId;
-    const PW = req.body.sendPw;
+    const ID = req.body.userId;
+    const PW = req.body.userPw;
     var sql = 'INSERT INTO USER (ID, PW) VALUES (?, ?);';
   
-    console.log(ID, PW);
     maria.query(sql, [ID, PW], function(err, rows, fields){
         if(!err) {
-            console.log("되는거야 뭐야");
-            res.send("가입완료");
-            console.log(rows);
+            res.status(200).json({status:"success", data:null});
         }else{
-            console.log("error : ", err);
+            res.status(400).json({status:"fail", data:{msg:"회원가입에 실패했습니다. 다시 시도해주세요"}})
+            res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })
 })
@@ -43,22 +41,20 @@ router.post('/', function(req, res) {
 //사용자가 입력한 아이디가 디비에 있는지 확인하는 부분
 //반환값으로 rows의 길이가 1이면 데이터가 있는것, 0이면 데이터가 없는것임
 router.post('/check/id/valid', (req, res) => {
-    const validId = req.body.sendValidId;
+    const validId = req.body.userId;
     console.log(validId);
 
     var sql = 'SELECT ID FROM USER WHERE ID = ?';
 
     maria.query(sql, validId, function(err, rows, fields){
     if(!err){
-        console.log(rows.length)
-        console.log(fields)
         if (rows.length == 0){
-            res.send("success")
+            res.status(200).json({status:"success", data:null});
         }else{
-            res.send("fail")
+            res.status(400).json({status:"fail", data:{msg:"중복된 아이디 입니다. 다시 시도해주세요"}})
         }
     }else{
-        console.log("error", err)
+        res.status(500).json({status:"error", msg:"서버 오류 발생"})
     }
     })
 })
