@@ -28,35 +28,29 @@ const secretKey = 'culture';
 // 사용자의 입력으로부터 들어온 비밀번호를 디코딩 한것 vs 디비에 암호화 되어 저장된 비밀번호 를 대조
 // 대조를 통해 같은 비밀번호임이 인정됨 + 아이디 또한 디비에 저장됨 = 로그인 완료
 router.post('/', (req, res) => {
-    const id = req.body.sendId;
-    const pw = req.body.sendPw;
+    const id = req.body.userId;
+    const pw = req.body.userPw;
     
     //culture은 암호해독에 필요한 키 이다. 나중에 수정과 동시에 숨겨야 함
     const originalPw = crypto.AES.decrypt(pw, 'culture').toString(crypto.enc.Utf8);
-    console.log('originalPw = ', originalPw);
-
-    // console.log(id, pw)
 
     var sql = 'SELECT * FROM USER WHERE ID = ?';
 
     maria.query(sql, [id], function(err, rows, fields){
         if(!err){
-            // console.log(rows[0].PW)
-            // const bytesInDB = crypto.AES.encrypt(rows[0].PW, 'culture').toString();
             if (rows.length == 0){
-                res.send("fail")
+                res.status(400).json({status:"fail", data:{msg:"아이디, 비밀번호를 다시 확인해주세요."}})
             }else{
                 const originalPwInDB = crypto.AES.decrypt(rows[0].PW, 'culture').toString(crypto.enc.Utf8);
-                console.log(originalPwInDB)
-                console.log("제발!!")
                 if (originalPw == originalPwInDB){
                     console.log("우와!! 성공!!")
                     const token = jwt.sign({id : id}, secretKey, {expiresIn:'1h'})
-                    res.json({token})
+                    res.status(200).json({status:"success", data:token})
                 }
             }
         }else{
-            console.log(err)
+            res.status(400).json({status:"fail", data:{msg:"아이디, 비밀번호를 다시 확인해주세요."}})
+            res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })
 })
@@ -70,11 +64,10 @@ router.post('/status', (req, res) => {
     console.log(req.body.validToken);
     jwt.verify(jwtData, secretKey, (err, decoded) => {
         if (!err){
-            console.log(decoded);
-            res.send(decoded);
+            res.status(200).json({status:"success", data:null})
         }else{
-            console.log('error : ', err);
-            res.send(err);
+            res.status(400).json({status:"fail", data:{msg:"만료된 토큰입니다."}});
+            res.status(500).json({status:"error", msg:"서버 오류 발생"});
         }
     })
 })
@@ -107,7 +100,6 @@ router.post('/kakao', (req, res) => {
         },
     })
     .then((response) => {
-        console.log(JSON.stringify(response.data));
         const {access_token} = response.data;
         kakaoAccessToken = access_token;
         axios.post(
@@ -120,9 +112,7 @@ router.post('/kakao', (req, res) => {
                 }
             }
         ).then((response) => {
-            console.log('진짜진짜몬가몬가', response.data.id);
-            console.log('진짜진짜몬가몬가', response.data.kakao_account.profile.nickname);
-            
+
             const kakaoId = (response.data.id).toString()
             const kakaoNickname = response.data.kakao_account.profile.nickname;
 
@@ -130,14 +120,7 @@ router.post('/kakao', (req, res) => {
             var sqlInsert = 'INSERT INTO KAKAO (ID, NICKNAME) VALUES (?, ?);';
             maria.query(sqlFind, kakaoId, function(err, rows, fields){
                 if(!err){
-                    console.log("여기야?")
-                    console.log(rows)
-                    console.log(fields)
                     if (rows.length == 0){
-
-                        // res.send("success")
-                        console.log("여기도?")
-                        console.log(rows)
                         maria.query(sqlInsert, [kakaoId, kakaoNickname], function(err, rows, feilds){
                             if(!err){
                                 console.log('디비에 저장 성공')
@@ -221,12 +204,9 @@ router.post('/naver', (req, res) =>  {
             }
         }
         ).then((response) => {
-        console.log('이번에도 진짜진짜 몬가몬가다', response.data);
 
         const naverId = response.data.response.id
         const naverNickname = response.data.response.nickname
-
-        console.log(naverId, naverNickname)
 
         var sqlFind = 'SELECT ID FROM NAVER WHERE ID = ?;';
         var sqlInsert = 'INSERT INTO NAVER (ID, NICKNAME) VALUES (?, ?);';
@@ -251,7 +231,6 @@ router.post('/naver', (req, res) =>  {
                 console.log("find error", err)
             }
         })
-        // res.send("로그인 성공!!")
         }).catch((Error) => {
             res.send("진짜루..?")
             console.log(Error);
