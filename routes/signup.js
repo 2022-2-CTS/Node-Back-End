@@ -63,28 +63,28 @@ router.post('/check/id/valid', (req, res) => {
 //닉네임 설정 기능
 //닉네임이 null인지 아닌지 확인
 router.post("/nickname/status", (req, res) => {
-    const registerType = req.body.registerType;
+    const userType = req.body.userType;
     const userId = req.body.userId;
 
     var sql = ""
 
-    if(registerType == "USER"){
-        sql = "SELECT APPNICKNAME FROM " + registerType + " WHERE ID = " + '"' +  userId + '"'; 
+    if(userType == "USER"){
+        sql = "SELECT APPNICKNAME FROM " + userType + " WHERE ID = " + '"' +  userId + '"'; 
     }
     else{
-        sql = "SELECT APPNICKNAME FROM " + registerType + " WHERE NICKNAME = " + '"' + userId + '"'; 
+        sql = "SELECT APPNICKNAME FROM " + userType + " WHERE NICKNAME = " + '"' + userId + '"'; 
     }
     
     maria.query(sql, function(err, rows, fields){
         if(!err){
-            console.log(rows[0].APPNICKNAME);
             if(rows[0].APPNICKNAME != null){
-                res.send("exist");
+                var nickname = rows[0].APPNICKNAME;
+                res.status(200).json({status:"success", data:nickname});
             }else{
-                res.send("not exist");
+                res.status(400).json({status:"fail", data:{msg:"설정된 닉네임이 없습니다. 닉네임 설정으로 이동합니다."}})
             }
         }else{
-            console.log(err);
+            res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })
 })
@@ -92,25 +92,24 @@ router.post("/nickname/status", (req, res) => {
 //닉네임이 null인 경우 새롭게 저장
 router.post("/nickname", (req, res) => {
 
-    const registerType = req.body.registerType;
+    const userType = req.body.userType;
     const userId = req.body.userId;
     const nickname = req.body.nickname;
 
     var sql = ""
 
-    if(registerType == "USER"){
-        sql = "UPDATE " + registerType + " SET APPNICKNAME = ? WHERE ID = " + '"' + userId + '"';
+    if(userType == "USER"){
+        sql = "UPDATE " + userType + " SET APPNICKNAME = ? WHERE ID = " + '"' + userId + '"';
     }
     else{
-        sql = "UPDATE " + registerType + " SET APPNICKNAME = ? WHERE NICKNAME = " + '"' + userId + '"';
+        sql = "UPDATE " + userType + " SET APPNICKNAME = ? WHERE NICKNAME = " + '"' + userId + '"';
     }
     maria.query(sql, [nickname], function(err, rows, fields){
         if(!err){
-            console.log("DB저장 성공");
-            res.send("200");
+            res.status(200).json({status:"success", data:nickname});
         }else{
-            console.log("DB저장 실패");
-            console.log(err)
+            res.status(400).json({status:"fail", data:{msg:"닉네임 설정에 실패했습니다. 다시 시도해주세요."}})
+            res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })
 })

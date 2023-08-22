@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 
 var apiRouter = require('./routes/event/list');
-var postRouter = require('./routes/post/post');
+// var postRouter = require('./routes/post/post');
 var favoriteRouter = require('./routes/mydata/favorite');
 
 //로그인 라우터
@@ -32,8 +32,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/post',postRouter);
-app.use('/api/event',eventsRouter);
+// app.use('/api/post',postRouter);
+// app.use('/api/event',eventsRouter);
 app.use('/api/mydata/favorite', favoriteRouter);
 
 //로그인 라우터
