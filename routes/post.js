@@ -24,12 +24,32 @@ router.post('/write', (req) => {
 
     const sql = 'INSERT INTO POST (ID, TITLE, DATE, LOCATION, TAG, CONTENT) values ( ?, ?, ?, ?, ?, ? )';
 
-    conn.query(sql, data, function (err, rows) {
-        if (err) {
-            console.log(err)
-        }
-        else{
-            console.log("저장")
+    conn.query(sql, data, function ( req, res ) {
+        try {
+            if (data === undefined) {
+
+                res.status(400).json({
+                    status: "fail",
+                    data: {
+                        msg: "글 작성에 실패했습니다. 다시 시도해주세요."
+                    }
+                });
+                
+                return;
+            }
+
+            res.status(200).json({
+                status: "success",
+                data: null
+            })
+
+        } catch ( error ) {
+
+            res.status(500).json({
+                status: "error",
+                msg: "서버 오류 발생"
+            })
+
         }
     })
 
@@ -64,7 +84,22 @@ router.get('/lists', (req, res) => {
             }
 
             writeData = JSON.stringify(writeData)
-            res.send(writeData)
+            
+            try {
+
+                res.status(200).json({
+                    status: "success",
+                    data: writeData
+                })
+
+            } catch (error) {
+
+                res.status(500).json({
+                    status: "error",
+                    msg: "서버 오류 발생"
+                })
+
+            }
         }
     })
 

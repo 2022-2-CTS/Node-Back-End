@@ -38,9 +38,24 @@ router.get( '/musicals', (req, res) => {
                     musicalData.push(event);
                 }
             }
+
             musicalData = JSON.stringify(musicalData)
 
-            res.send(musicalData)
+            try {
+
+                res.status(200).json({
+                    status: "success",
+                    data: musicalData
+                })
+
+            } catch (error) {
+
+                res.status(500).json({
+                    status: "error",
+                    msg: "서버 오류 발생"
+                })
+                
+            }
         }
     })
 })
@@ -71,9 +86,24 @@ router.get( '/exhibitions', (req, res) => {
                     exhibitionData.push(event);
                 }
             }
+
             exhibitionData = JSON.stringify(exhibitionData)
-            
-            res.send(exhibitionData)
+
+            try {
+
+                res.status(200).json({
+                    status: "success",
+                    data: exhibitionData
+                })
+
+            } catch (error) {
+
+                res.status(500).json({
+                    status: "error",
+                    msg: "서버 오류 발생"
+                })
+
+            }
         }
     })
 })
@@ -104,9 +134,24 @@ router.get( '/concerts', (req, res) => {
                     concertData.push(event);
                 }
             }
+
             concertData = JSON.stringify(concertData)
-            
-            res.send(concertData)
+
+            try {
+
+                res.status(200).json({
+                    status: "success",
+                    data: concertData
+                })
+
+            } catch (error) {
+
+                res.status(500).json({
+                    status: "error",
+                    msg: "서버 오류 발생"
+                })
+
+            }
         }
     })
 })
@@ -137,9 +182,24 @@ router.get( '/plays', (req, res) => {
                     playData.push(event);
                 }
             }
+
             playData = JSON.stringify(playData)
-            
-            res.send(playData)
+
+            try {
+                
+                res.status(200).json({
+                    status: "success",
+                    data: playData
+                })
+
+            } catch (error) {
+
+                res.status(500).json({
+                    status: "error",
+                    msg: "서버 오류 발생"
+                })
+
+            }
         }
     })
 })
