@@ -8,7 +8,7 @@ router.use(bodyParser.json());
 const fs = require('fs');
 const axios = require('axios');
 
-const conn = require('../../database/connect/maria');
+const conn = require('../database/connect/maria');
 
 //작성한 글 DB 저장
 router.post('/write', (req) => {
