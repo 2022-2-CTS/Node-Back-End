@@ -15,10 +15,10 @@ const maria = require('../../database/connect/maria');
 const crypto = require('crypto-js');
 
 
-router.post("/favoriteUpload", (req, res) => {
-    const id = req.body.id;
-    const url = req.body.url;
-
+router.post("/favorites", (req, res) => {
+    const json = req.body.favoriteObject
+    const obj = JSON.parse(str);
+    
     console.log(id, url)
     
     var sql = 'INSERT INTO FAVORITE (ID, URL) VALUES (?,?)';

@@ -63,13 +63,18 @@ router.post('/', (req, res) => {
 //jwt의 정보를 분석해서 유효시간이 다 되지 않았다면 자동로그인
 //아니면 로그아웃의 절차를 밟음.
 router.post('/status', (req, res) => {
-    const jwtData = req.body.validToken;
-    console.log(req.body.validToken);
+    const jwtData = req.body.userToken;
+    console.log(req.body.userToken);
     jwt.verify(jwtData, secretKey, (err, decoded) => {
-        if (!err){
-            res.status(200).json({status:"success", data:{result:"true", id:decoded.id}})
-        }else{
-            res.status(200).json({status:"success", data:{result:"false"}});
+        try{
+            if (!err){
+                res.status(200).json({status:"success", data:{result:"true", id:decoded.id}})
+            }else{
+                res.status(200).json({status:"success", data:{result:"false", msg:err}});
+            }
+        }
+        catch{
+            res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })
 })
