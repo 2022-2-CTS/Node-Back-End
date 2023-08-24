@@ -67,12 +67,9 @@ router.post("/nickname/status", (req, res) => {
 
     var sql = ""
 
-    if(userType == "USER"){
-        sql = "SELECT APPNICKNAME FROM " + userType + " WHERE ID = " + '"' +  userId + '"'; 
-    }
-    else{
-        sql = "SELECT APPNICKNAME FROM " + userType + " WHERE NICKNAME = " + '"' + userId + '"'; 
-    }
+    
+    sql = "SELECT APPNICKNAME FROM " + userType + " WHERE ID = " + '"' +  userId + '"'; 
+    
     
     maria.query(sql, function(err, rows, fields){
         if(!err){

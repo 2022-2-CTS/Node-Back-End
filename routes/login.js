@@ -137,9 +137,9 @@ router.post('/kakao', (req, res) => {
                             }
                         })
                     }else{
-                        const token = jwt.sign({id:kakaoNickname}, secretKey, {expiresIn:'1h'})
+                        const token = jwt.sign({id:kakaoId}, secretKey, {expiresIn:'1h'})
                         const data = "로그인 성공!!"
-                        res.send({token, data, kakaoNickname})
+                        res.send({token, data, kakaoId})
                     }
                 }else{
                     console.log("error", err)
@@ -230,9 +230,9 @@ router.post('/naver', (req, res) =>  {
                         }
                     })
                 }else{
-                    const token = jwt.sign({id:naverNickname}, secretKey, {expiresIn:'1h'})
+                    const token = jwt.sign({id:naverId}, secretKey, {expiresIn:'1h'})
                     const data = "로그인 성공!!"
-                    res.send({token, data, naverNickname})
+                    res.send({token, data, naverId})
                 }
             }else{
                 console.log("find error", err)
