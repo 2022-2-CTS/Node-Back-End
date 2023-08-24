@@ -41,18 +41,20 @@ router.post('/', (req, res) => {
     var sql = 'SELECT * FROM USER WHERE ID = ?';
 
     maria.query(sql, [id], function(err, rows, fields){
-        if(!err){
-            if (rows.length != 0){
-                const originalPwInDB = crypto.AES.decrypt(rows[0].PW, 'culture').toString(crypto.enc.Utf8);
-                if (originalPw == originalPwInDB){
-                    console.log("우와!! 성공!!")
-                    const token = jwt.sign({id : id}, secretKey, {expiresIn:'1h'})
-                    res.status(200).json({status:"success", data:{result:"true", token:token}})
+        try{
+            if(!err){
+                if (rows.length != 0){
+                    const originalPwInDB = crypto.AES.decrypt(rows[0].PW, 'culture').toString(crypto.enc.Utf8);
+                    if (originalPw == originalPwInDB){
+                        console.log("우와!! 성공!!")
+                        const token = jwt.sign({id : id}, secretKey, {expiresIn:'1h'})
+                        res.status(200).json({status:"success", data:{result:"true", token:token}})
+                    }
+                }else{
+                    res.status(200).json({status:"success", data:{result:"false", msg:"로그인에 실패했습니다."}})
                 }
-            }else{
-                res.status(200).json({status:"success", data:{result:"false", msg:"로그인에 실패했습니다."}})
             }
-        }else{
+        }catch{
             res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })
@@ -126,29 +128,34 @@ router.post('/kakao', (req, res) => {
             var sqlFind = 'SELECT ID FROM KAKAO WHERE ID = ?;';
             var sqlInsert = 'INSERT INTO KAKAO (ID, NICKNAME) VALUES (?, ?);';
             maria.query(sqlFind, kakaoId, function(err, rows, fields){
-                if(!err){
-                    if (rows.length == 0){
-                        maria.query(sqlInsert, [kakaoId, kakaoNickname], function(err, rows, feilds){
-                            if(!err){
-                                console.log('디비에 저장 성공')
-                                console.log(rows)
-                            }else{
-                                console.log("Error : ", err)
-                            }
-                        })
+                try{
+                    if(!err){
+                        if (rows.length == 0){
+                            maria.query(sqlInsert, [kakaoId, kakaoNickname], function(err, rows, feilds){
+                                try{
+                                    if(!err){
+                                        res.status(200).json({status:"success", data:{save:"true"}});
+                                    }else{
+                                        res.status(200).json({status:"success", data:{save:"false"}});
+                                    }
+                                }catch{
+                                    res.status(500).json({status:"error", msg:"서버 오류 발생"})
+                                }
+                            })
+                        }else{
+                            const token = jwt.sign({id:kakaoId}, secretKey, {expiresIn:'1h'})                            
+                            res.status(200).json({status:"success", data:{result:"true", token:token}})
+                        }
                     }else{
-                        const token = jwt.sign({id:kakaoId}, secretKey, {expiresIn:'1h'})
-                        const data = "로그인 성공!!"
-                        res.send({token, data, kakaoId})
+                        res.status(200).json({status:"success", data:{result:"false", msg:"로그인에 실패했습니다."}})
                     }
-                }else{
-                    console.log("error", err)
+                }catch{
+                    res.status(500).json({status:"error", msg:"서버 오류 발생"})
                 }
             })
         }).catch((err) => {
             console.log(err)
         })
-            // res.send("로그인 성공!!")
     }).catch((Error)=>{
         console.log(Error);
     })
@@ -158,12 +165,15 @@ router.post('/kakao/status', (req, res) => {
     const jwtData = req.body.kakaoAccessToken;
     console.log(req.body.kakaoAccessToken);
     jwt.verify(jwtData, secretKey, (err, decoded) => {
-        if (!err){
-            console.log(decoded);
-            res.send(decoded);
-        }else{
-            console.log('error : ', err);
-            res.send(err);
+        try{
+            if (!err){
+                res.status(200).json({status:"success", data:{result:"true", id:decoded.id}})
+            }else{
+                res.status(200).json({status:"success", data:{result:"false", msg:err}});
+            }
+        }
+        catch{
+            res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })
 })
@@ -219,23 +229,29 @@ router.post('/naver', (req, res) =>  {
         var sqlInsert = 'INSERT INTO NAVER (ID, NICKNAME) VALUES (?, ?);';
 
         maria.query(sqlFind, naverId, function(err, rows, feilds){
-            if(!err){
-                if(rows.length == 0){
-                    maria.query(sqlInsert, [naverId, naverNickname], function(err, rows, feilds){
-                        if(!err){
-                            console.log('디비에 저장 성공')
-                            console.log(rows)
-                        }else{
-                            console.log("insert error ", err)
-                        }
-                    })
+            try{
+                if(!err){
+                    if(rows.length == 0){
+                        maria.query(sqlInsert, [naverId, naverNickname], function(err, rows, feilds){
+                            try{
+                                if(!err){
+                                    res.status(200).json({status:"success", data:{save:"true"}});
+                                }else{
+                                    res.status(200).json({status:"success", data:{save:"false"}});
+                                }
+                            }catch{
+                                res.status(500).json({status:"error", msg:"서버 오류 발생"})
+                            }
+                        })
+                    }else{
+                        const token = jwt.sign({id:naverId}, secretKey, {expiresIn:'1h'})
+                        res.status(200).json({status:"success", data:{result:"true", token:token}})
+                    }
                 }else{
-                    const token = jwt.sign({id:naverId}, secretKey, {expiresIn:'1h'})
-                    const data = "로그인 성공!!"
-                    res.send({token, data, naverId})
+                    res.status(200).json({status:"success", data:{result:"false", msg:"로그인에 실패했습니다."}})
                 }
-            }else{
-                console.log("find error", err)
+            }catch{
+                res.status(500).json({status:"error", msg:"서버 오류 발생"})
             }
         })
         }).catch((Error) => {
@@ -255,12 +271,15 @@ router.post('/naver/status', (req, res) => {
     const jwtData = req.body.naverAccessToken
     console.log(req.body.naverAccessToken);
     jwt.verify(jwtData, secretKey, (err, decoded) => {
-        if(!err){
-            console.log(decoded);
-            res.send(decoded);
-        }else{
-            console.log('error : ', err);
-            res.send(err);
+        try{
+            if (!err){
+                res.status(200).json({status:"success", data:{result:"true", id:decoded.id}})
+            }else{
+                res.status(200).json({status:"success", data:{result:"false", msg:err}});
+            }
+        }
+        catch{
+            res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })
 })

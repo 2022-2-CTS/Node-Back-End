@@ -28,10 +28,15 @@ router.post('/', function(req, res) {
     var sql = 'INSERT INTO USER (ID, PW) VALUES (?, ?);';
   
     maria.query(sql, [ID, PW], function(err, rows, fields){
-        if(!err) {
-            res.status(200).json({status:"success", data:null});
-        }else{
-            res.status(200).json({status:"success", msg:"서버 오류 발생"})
+        try{
+            if(!err) {
+                res.status(200).json({status:"success", data:{result:"true"}});
+            }else{
+                res.status(200).json({status:"success", data:{result:"false"}})
+            }
+        }
+        catch{
+            res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })
 })
@@ -46,13 +51,17 @@ router.post('/check/id/valid', (req, res) => {
     var sql = 'SELECT ID FROM USER WHERE ID = ?';
 
     maria.query(sql, validId, function(err, rows, fields){
-        if(!err){
-            if (rows.length == 0){
-                res.status(200).json({status:"success", data:null});
+        try{
+            if(!err){
+                if (rows.length == 0){
+                    res.status(200).json({status:"success", data:null});
+                }else{
+                    res.status(200).json({status:"success", data:{msg:"중복된 아이디 입니다. 다시 시도해주세요"}})
+                }
             }else{
-                res.status(200).json({status:"success", data:{msg:"중복된 아이디 입니다. 다시 시도해주세요"}})
+                res.status(400).json({status:"fail", data:{msg:"잘못된 입력입니다."}})
             }
-        }else{
+        }catch{
             res.status(500).json({status:"error", msg:"서버 오류 발생"})
         }
     })

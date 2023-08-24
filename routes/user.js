@@ -15,6 +15,7 @@ const maria = require('../database/connect/maria');
 const crypto = require('crypto-js');
 
 
+//찜 목록 저장하기
 router.post("/favorite", (req, res) => {
     const json = req.body.favoriteObject;
     const obj = JSON.parse(json)
@@ -29,8 +30,6 @@ router.post("/favorite", (req, res) => {
         obj.event.price,
         obj.event.src
     ]
-
-    console.log(objData)
 
     for (var i=0; i<objData.length; i++){
         if(objData[i] == null || objData[i] == ""){
@@ -60,6 +59,8 @@ router.post("/favorite", (req, res) => {
     })
 })
 
+
+//찜 목록 불러오기
 router.post("/favorite/list", (req, res) => {
     const userid = req.body.userId;
     console.log(userid)
