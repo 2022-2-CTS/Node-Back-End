@@ -18,17 +18,17 @@ const crypto = require('crypto-js');
 //찜 목록 저장하기
 router.post("/favorites", (req, res) => {
     const json = req.body.favoriteObject;
-    const obj = JSON.parse(json)
+    
 
     const objData = [
-        obj.userId,
-        obj.event.title,
-        obj.event.location,
-        obj.event.startDate,
-        obj.event.endDate,
-        obj.event.time,
-        obj.event.price,
-        obj.event.src
+        json.userId,
+        json.event.title,
+        json.event.location,
+        json.event.startDate,
+        json.event.endDate,
+        json.event.time,
+        json.event.price,
+        json.event.src
     ]
 
     for (var i=0; i<objData.length; i++){
