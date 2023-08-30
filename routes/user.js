@@ -16,7 +16,7 @@ const crypto = require('crypto-js');
 
 
 //찜 목록 저장하기
-router.post("/favorite", (req, res) => {
+router.post("/favorites", (req, res) => {
     const json = req.body.favoriteObject;
     const obj = JSON.parse(json)
 
@@ -61,7 +61,7 @@ router.post("/favorite", (req, res) => {
 
 
 //찜 목록 불러오기
-router.post("/favorite/list", (req, res) => {
+router.post("/favorites/list", (req, res) => {
     const userid = req.body.userId;
     console.log(userid)
     
