@@ -82,10 +82,10 @@ async function getPlayData() {
             }
             
             playData = JSON.stringify(playData);
-            fs.writeFileSync('./json/tmp_play_json.json', playData);
+            //fs.writeFileSync('./json/tmp_play_json.json', playData);
+            fs.writeFileSync('C:/Users/chyun/OneDrive - 동의대학교/바탕 화면/ReREACT/Node-Back-End/routes/event/json/tmp_play_json.json', playData);
             console.log("[SYSTEM] 연극 데이터 수집 완료");
         });
-
 }
 
 /* ************* 콘서트 ************* */
@@ -145,7 +145,8 @@ async function getConcertData() {
             }
 
             concertData = JSON.stringify(concertData);
-            fs.writeFileSync('./json/tmp_concert_json.json', concertData);
+            //fs.writeFileSync('./json/tmp_concert_json.json', concertData);
+            fs.writeFileSync('C:/Users/chyun/OneDrive - 동의대학교/바탕 화면/ReREACT/Node-Back-End/routes/event/json/tmp_concert_json.json', concertData);
             console.log("[SYSTEM] 콘서트 데이터 수집 완료");
         });
 }
@@ -205,7 +206,8 @@ async function getMusicalData() {
             }
 
             musicalData = JSON.stringify(musicalData);
-            fs.writeFileSync('./json/tmp_musical_json.json', musicalData);
+            //fs.writeFileSync('./json/tmp_musical_json.json', musicalData);
+            fs.writeFileSync('C:/Users/chyun/OneDrive - 동의대학교/바탕 화면/ReREACT/Node-Back-End/routes/event/json/tmp_musical_json.json', musicalData);
             console.log("[SYSTEM] 뮤지컬 데이터 수집 완료");
         });
 }
@@ -267,7 +269,8 @@ async function getexhibitionData() {
             }
 
             exhibitionData = JSON.stringify(exhibitionData);
-            fs.writeFileSync('./json/tmp_exhibition_json.json', exhibitionData);
+            //fs.writeFileSync('./json/tmp_exhibition_json.json', exhibitionData);
+            fs.writeFileSync('C:/Users/chyun/OneDrive - 동의대학교/바탕 화면/ReREACT/Node-Back-End/routes/event/json/tmp_exhibition_json.json', exhibitionData);
             console.log("[SYSTEM] 전시 데이터 수집 완료");
         });
 }
