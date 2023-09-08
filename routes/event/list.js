@@ -33,7 +33,8 @@ router.get( '/musicals', (req, res) => {
                         endDate: rows[i].ed_dt, // 행사 종료일
                         time: rows[i].showtime, // 행사 시간(duration)
                         price: rows[i].price, // 행사 가격
-                        src: rows[i].poster // 행사 포스터 이미지 경로 url
+                        src: rows[i].poster, // 행사 포스터 이미지 경로 url
+                        theme:rows[i].theme //테마코드
                     }
                     musicalData.push(event);
                 }
@@ -81,7 +82,8 @@ router.get( '/exhibitions', (req, res) => {
                         endDate: rows[i].ed_dt, // 행사 종료일
                         time: rows[i].showtime, // 행사 시간(duration)
                         price: rows[i].price, // 행사 가격
-                        src: rows[i].poster // 행사 포스터 이미지 경로 url
+                        src: rows[i].poster, // 행사 포스터 이미지 경로 url
+                        theme:rows[i].theme //테마코드
                     }
                     exhibitionData.push(event);
                 }
@@ -129,7 +131,8 @@ router.get( '/concerts', (req, res) => {
                         endDate: rows[i].ed_dt, // 행사 종료일
                         time: rows[i].showtime, // 행사 시간(duration)
                         price: rows[i].price, // 행사 가격
-                        src: rows[i].poster // 행사 포스터 이미지 경로 url
+                        src: rows[i].poster, // 행사 포스터 이미지 경로 url
+                        theme:rows[i].theme //테마코드
                     }
                     concertData.push(event);
                 }
@@ -177,7 +180,8 @@ router.get( '/plays', (req, res) => {
                         endDate: rows[i].ed_dt, // 행사 종료일
                         time: rows[i].showtime, // 행사 시간(duration)
                         price: rows[i].price, // 행사 가격
-                        src: rows[i].poster // 행사 포스터 이미지 경로 url
+                        src: rows[i].poster, // 행사 포스터 이미지 경로 url
+                        theme:rows[i].theme //테마코드
                     }
                     playData.push(event);
                 }
