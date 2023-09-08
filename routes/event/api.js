@@ -74,10 +74,10 @@ async function getPlayData() {
                         op_ed_dt: responseData.item[i].op_ed_dt,
                         op_st_dt: responseData.item[i].op_st_dt,
                         showtime: responseData.item[i].showtime,
-                        price: responseData.item[i].price
+                        price: responseData.item[i].price,
+                        theme: responseData.item[i].theme
                     }
                 }
-
                 playData.push(tmpData);
             }
             
@@ -136,7 +136,8 @@ async function getConcertData() {
                         op_ed_dt: responseData.item[i].op_ed_dt,
                         op_st_dt: responseData.item[i].op_st_dt,
                         showtime: responseData.item[i].showtime,
-                        price: responseData.item[i].price
+                        price: responseData.item[i].price,
+                        theme: responseData.item[i].theme
                     }
                 }
 
@@ -195,7 +196,8 @@ async function getMusicalData() {
                         op_ed_dt: responseData.item[i].op_ed_dt,
                         op_st_dt: responseData.item[i].op_st_dt,
                         showtime: responseData.item[i].showtime,
-                        price: responseData.item[i].price
+                        price: responseData.item[i].price,
+                        theme: responseData.item[i].theme
                     }
                 }
 
@@ -256,7 +258,8 @@ async function getexhibitionData() {
                         op_ed_dt: responseData.item[i].op_ed_dt,
                         op_st_dt: responseData.item[i].op_st_dt,
                         showtime: responseData.item[i].showtime,
-                        price: responseData.item[i].price
+                        price: responseData.item[i].price,
+                        theme: responseData.item[i].theme
                     }
                 }
 
