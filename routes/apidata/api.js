@@ -10,7 +10,7 @@ const conn = require('../../database/connect/maria');
 
 const category =['concert','musical','play','exhibit']
 
-const sql = 'INSERT INTO apiData (category, url, title,st_dt,ed_dt,showtime,price,poster,location) values (?,?,?,?,?,?,?,?,?)';
+const sql = 'INSERT INTO apiData (category, url, title,st_dt,ed_dt,showtime,price,poster,location,theme) values (?,?,?,?,?,?,?,?,?,?)';
 
 for( let j=0; j<val.length; j++ ) {
 
@@ -27,7 +27,8 @@ for( let j=0; j<val.length; j++ ) {
       tmpData[i].data.showtime, 
       tmpData[i].data.price, 
       tmpData[i].data.imgSrc, 
-      tmpData[i].data.location]
+      tmpData[i].data.location
+      tmpData[i].data.theme]
 
     conn.query(sql, data, function (err, rows, fields) {
       if (err) {
