@@ -12,9 +12,9 @@ const category =['concert','musical','play','exhibit']
 
 const sql = 'INSERT INTO apiData (category, url, title,st_dt,ed_dt,showtime,price,poster,location,theme) values (?,?,?,?,?,?,?,?,?,?)';
 
-for( let j=0; j<val.length; j++ ) {
+for( let j=0; j<category.length; j++ ) {
 
-  let tmpData = require('../event/json/'+val[j]+'_json.json');
+  let tmpData = require('../event/json/'+category[j]+'_json.json');
 
   for ( let i = 0; i < tmpData.length; i++ ) {
     
@@ -27,7 +27,7 @@ for( let j=0; j<val.length; j++ ) {
       tmpData[i].data.showtime, 
       tmpData[i].data.price, 
       tmpData[i].data.imgSrc, 
-      tmpData[i].data.location
+      tmpData[i].data.location,
       tmpData[i].data.theme]
 
     conn.query(sql, data, function (err, rows, fields) {
