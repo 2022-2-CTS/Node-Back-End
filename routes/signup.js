@@ -84,8 +84,10 @@ router.post("/nickname/status", (req, res) => {
         if(!err){
             if(rows[0].APPNICKNAME != null){
                 var nickname = rows[0].APPNICKNAME;
+                console.log(nickname)
                 res.status(200).json({status:"success", data:{exist: "true", nickname : nickname}});
             }else{
+                console.log("error")
                 res.status(200).json({status:"success", data:{exist: "false"}})
             }
         }else{
