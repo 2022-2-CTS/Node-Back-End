@@ -105,12 +105,9 @@ router.post("/nickname", (req, res) => {
 
     var sql = ""
 
-    if(userType == "USER"){
-        sql = "UPDATE " + userType + " SET APPNICKNAME = ? WHERE ID = " + '"' + userId + '"';
-    }
-    else{
-        sql = "UPDATE " + userType + " SET APPNICKNAME = ? WHERE NICKNAME = " + '"' + userId + '"';
-    }
+    
+    sql = "UPDATE " + userType + " SET APPNICKNAME = ? WHERE ID = " + '"' + userId + '"';
+    
     maria.query(sql, [nickname], function(err, rows, fields){
         if(!err){
             res.status(200).json({status:"success", data:{nickname:nickname}});
