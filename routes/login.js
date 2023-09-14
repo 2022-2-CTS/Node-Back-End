@@ -144,7 +144,7 @@ router.post('/kakao', (req, res) => {
                             })
                         }else{
                             const token = jwt.sign({id:kakaoId}, secretKey, {expiresIn:'1h'})                            
-                            res.status(200).json({status:"success", data:{result:"true", token:token}})
+                            res.status(200).json({status:"success", data:{result:"true", token:token, kakaoId:kakaoId}})
                         }
                     }else{
                         res.status(200).json({status:"success", data:{result:"false", msg:"로그인에 실패했습니다."}})
@@ -245,7 +245,7 @@ router.post('/naver', (req, res) =>  {
                         })
                     }else{
                         const token = jwt.sign({id:naverId}, secretKey, {expiresIn:'1h'})
-                        res.status(200).json({status:"success", data:{result:"true", token:token}})
+                        res.status(200).json({status:"success", data:{result:"true", token:token, naverId:naverId}})
                     }
                 }else{
                     res.status(200).json({status:"success", data:{result:"false", msg:"로그인에 실패했습니다."}})

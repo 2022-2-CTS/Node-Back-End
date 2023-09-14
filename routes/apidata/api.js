@@ -10,7 +10,7 @@ const conn = require('../../database/connect/maria');
 
 const category =['concert','musical','play','exhibit']
 
-const sql = 'INSERT INTO apiData (category, url, title,st_dt,ed_dt,showtime,price,poster,location,theme) values (?,?,?,?,?,?,?,?,?,?)';
+const sql = 'INSERT INTO EVENT (category, url, title,st_dt,ed_dt,showtime,price,poster,location,theme) values (?,?,?,?,?,?,?,?,?,?)';
 
 for( let j=0; j<category.length; j++ ) {
 

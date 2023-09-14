@@ -84,8 +84,10 @@ router.post("/nickname/status", (req, res) => {
         if(!err){
             if(rows[0].APPNICKNAME != null){
                 var nickname = rows[0].APPNICKNAME;
+                console.log(nickname)
                 res.status(200).json({status:"success", data:{exist: "true", nickname : nickname}});
             }else{
+                console.log("error")
                 res.status(200).json({status:"success", data:{exist: "false"}})
             }
         }else{
@@ -103,12 +105,9 @@ router.post("/nickname", (req, res) => {
 
     var sql = ""
 
-    if(userType == "USER"){
-        sql = "UPDATE " + userType + " SET APPNICKNAME = ? WHERE ID = " + '"' + userId + '"';
-    }
-    else{
-        sql = "UPDATE " + userType + " SET APPNICKNAME = ? WHERE NICKNAME = " + '"' + userId + '"';
-    }
+    
+    sql = "UPDATE " + userType + " SET APPNICKNAME = ? WHERE ID = " + '"' + userId + '"';
+    
     maria.query(sql, [nickname], function(err, rows, fields){
         if(!err){
             res.status(200).json({status:"success", data:{nickname:nickname}});
