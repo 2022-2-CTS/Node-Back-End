@@ -15,6 +15,8 @@ var signupRouter = require("./routes/signup");
 
 var themeRouter = require('./routes/event/theme');
 
+var checkRouter = require('./routes/check')
+
 var app = express();
 // ADD: cors
 var cors = require('cors');
@@ -37,6 +39,8 @@ app.use('/api/post',postRouter);
 app.use('/api/event',eventsRouter);
 app.use('/api/user/', userRouter);
 app.use('/api/event/theme', themeRouter);
+
+app.use('/api/check', checkRouter)
 
 //로그인 라우터
 app.use('/api/login/', loginRouter);

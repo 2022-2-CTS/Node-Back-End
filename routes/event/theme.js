@@ -90,7 +90,7 @@ router.post("/", (req, res) => {
     }
 })
 
-router.post("/select", (req, res) => {
+router.post("/list", (req, res) => {
 
     try{
         const themeCode = req.body.themeCode
@@ -102,35 +102,31 @@ router.post("/select", (req, res) => {
         var sql =  "SELECT * FROM EVENT"
         
         conn.query(sql, themeCode, function(err, rows, feilds){
-            try{
-                if(!err){
-                    console.log(rows.length)
-                    for(var i=0; i<rows.length; i++){
-                        if (rows[i].theme != null){
-                            var data =  rows[i].theme
-                            var words = data.split(',')
-                            // console.log(words.length)
-                            for (var j=0; j<words.length; j++){
-                                if(themeCode === words[j]){
-                                    // console.log(words[j])
-                                    themeArray.push(rows[i])
-                                }
+            
+            if(!err){
+                console.log(rows.length)
+                for(var i=0; i<rows.length; i++){
+                    if (rows[i].theme != null){
+                        var data =  rows[i].theme
+                        var words = data.split(',')
+                        // console.log(words.length)
+                        for (var j=0; j<words.length; j++){
+                            if(themeCode === words[j]){
+                                // console.log(words[j])
+                                themeArray.push(rows[i])
                             }
                         }
                     }
-                    console.log(themeArray.length)
-                    res.status(200).json({status:"success", data:themeArray})
-                }else{
-
                 }
-            }
-            catch(err){
-                console.log(err)
+                console.log(themeArray.length)
+                res.status(200).json({status:"success", data:themeArray})
+            }else{
+                res.status(200).json({status:"fail", data:{msg:err}})
             }
         })
     }
     catch(err){
-
+        res.status(500).json({status:"success", msg:"서버 오류 발생"})
     }
 })
 
