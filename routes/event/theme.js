@@ -69,9 +69,8 @@ const themeList = [
 router.post("/", (req, res) => {
     
     try{
-        const themeArray =  req.body.themeArray
-        console.log(themeArray)
-        const obj = JSON.parse(themeArray)
+        const obj =  req.body.themeArray
+        console.log(obj)
         var newThemeArray = []
     
         for(var i=0; i<obj.length; i++){
