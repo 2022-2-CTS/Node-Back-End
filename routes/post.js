@@ -12,7 +12,6 @@ const conn = require('../database/connect/maria');
 
 //작성한 글 DB 저장
 router.post('/write', (req, res) => {
-
     const data = [
         req.body.Writedata.userId,
         req.body.Writedata.title,
@@ -22,44 +21,42 @@ router.post('/write', (req, res) => {
         req.body.Writedata.content,
     ]
 
+    if (req.body.Writedata.userId == null ||
+        req.body.Writedata.title == null ||
+        req.body.Writedata.date == null ||
+        req.body.Writedata.location == null ||
+        req.body.Writedata.tag == null ||
+        req.body.Writedata.content == null) {
+            
+        res.status(200).json({
+            status: "fail",
+            data: {
+                msg: "글 작성에 실패했습니다. 다시 시도해주세요."
+            }
+        });
+
+        return;
+    }
+
     const sql = 'INSERT INTO POST (ID, TITLE, DATE, LOCATION, TAG, CONTENT) values ( ?, ?, ?, ?, ?, ? )';
 
     conn.query(sql, data, function (err, rows, fields) {
-        if (req.body.Writedata.userId == null ||
-            req.body.Writedata.title == null ||
-            req.body.Writedata.date == null ||
-            req.body.Writedata.location == null ||
-            req.body.Writedata.tag == null ||
-            req.body.Writedata.content == null) {
-                
-            console.log("400")
-            res.status(400).json({
-                status: "fail",
-                data: {
-                    msg: "글 작성에 실패했습니다. 다시 시도해주세요."
-                }
-            });
-
-            return;
+        if (!err) {
+            console.log("200")
+            res.status(200).json({
+                status: "success",
+                data: null
+            })
         }
         else {
-            try {
-                console.log("200")
-                res.status(200).json({
-                    status: "success",
-                    data: null
-                })
-            } catch (err) {
-                console.log("500")
-                res.status(500).json({
-                    status: "error",
-                    msg: "서버 오류 발생"
-                })
+            console.log("500")
+            res.status(500).json({
+                status: "error",
+                msg: "서버 오류 발생"
+            })
 
-            }
         }
-    })
-
+    });
 })
 
 //DB에 작성된 글 가져오기
