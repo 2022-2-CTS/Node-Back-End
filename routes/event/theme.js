@@ -93,8 +93,8 @@ router.post("/list", (req, res) => {
 
     try{
         const themeCode = req.body.themeCode
-        // console.log(themeCode)
-        // console.log(typeof(themeCode))
+        console.log(themeCode)
+        console.log(typeof(themeCode))
         
         var themeArray = []
 

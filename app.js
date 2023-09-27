@@ -13,6 +13,8 @@ var userRouter = require('./routes/user')
 var loginRouter = require('./routes/login');
 var signupRouter = require("./routes/signup");
 
+var authRouter = require("./routes/auth");
+
 var themeRouter = require('./routes/event/theme');
 
 var checkRouter = require('./routes/check')
@@ -40,7 +42,9 @@ app.use('/api/event',eventsRouter);
 app.use('/api/user/', userRouter);
 app.use('/api/event/theme', themeRouter);
 
-app.use('/api/check', checkRouter)
+app.use('/api/check', checkRouter);
+
+app.use('/api/auth', authRouter);
 
 //로그인 라우터
 app.use('/api/login/', loginRouter);
