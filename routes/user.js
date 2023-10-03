@@ -105,7 +105,7 @@ router.post("/favorites/list", (req, res) => {
                 if(rows.length == 0){
                     res.status(200).json({status:"success", data:{result:"false", msg:"저장된 찜 목록이 없습니다."}})
                 }else{
-                    res.status(200).json({status:"success", data:{result:"true", msg:rows[0]}})
+                    res.status(200).json({status:"success", data:{result:"true", msg:rows}})
                 }
             }
         }catch(err){
