@@ -1,8 +1,17 @@
-var createError = require('http-errors');
 var express = require('express');
+var app = express();
+// ADD: cors
+var cors = require('cors');
+app.use(cors({
+  origin: 'https://busan-seagull.vercel.app',
+  // origin: '*'
+}));
+
+var createError = require('http-errors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 
 
 var eventsRouter = require('./routes/event/list');
@@ -19,13 +28,7 @@ var themeRouter = require('./routes/event/theme');
 
 var checkRouter = require('./routes/check')
 
-var app = express();
-// ADD: cors
-var cors = require('cors');
-app.use(cors({
-  origin: 'https://busan-seagull.vercel.app',      // 출처 허용 옵션
-  credential: true, // 사용자 인증이 필요한 리소스(쿠키 등) 접근
-}));
+
 
 var maria = require('./database/connect/maria');
 maria.connect();
