@@ -16,8 +16,8 @@ jobs: # Github Actions 감지 후 할 일
       #  with:
       #    password: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: move to backend
-        run: |
-          cd ~/BusanCulture/backend
+        script: |
+          
       - name: Generate Environment Variables File for Production
         run: |
           echo "JWT_SECRET_KEY=$JWT_SECRET_KEY" >> .env.production
@@ -46,7 +46,16 @@ jobs: # Github Actions 감지 후 할 일
           port: ${{ secrets.EC2_SSH_PORT }}
           script: |
             pm2 delete 0
+            cd ~/BusanCulture/backend
             git pull
+            echo "JWT_SECRET_KEY=$JWT_SECRET_KEY" >> .env.production
+            echo "REACT_APP_KAKAO_REST_API_KEY=$REACT_APP_KAKAO_REST_API_KEY" >> .env.production
+            echo "REACT_APP_NAVER_CLIENT_ID=$REACT_APP_NAVER_CLIENT_ID" >> .env.production
+            echo "REACT_APP_NAVER_CLIENT_SECRET=$REACT_APP_NAVER_CLIENT_SECRET" >> .env.production
+            echo "DB_HOST_NAME=$DB_HOST_NAME" >> .env.production
+            echo "DB_HOST_USERNAME=$DB_HOST_USERNAME" >> .env.production
+            echo "DB_NAME=$DB_NAME" >> .env.production
+            echo "DB_PASSWORD=$DB_PASSWORD" >> .env.production
             npm install
             pm2 start npm -- start
             exit
