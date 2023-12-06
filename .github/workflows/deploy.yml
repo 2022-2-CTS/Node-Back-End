@@ -37,3 +37,12 @@ jobs: # Github Actions 감지 후 할 일
             npm install
             pm2 start npm -- start
             exit
+          env:
+            JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+            REACT_APP_KAKAO_REST_API_KEY: ${{ secrets.REACT_APP_KAKAO_REST_API_KEY }}
+            REACT_APP_NAVER_CLIENT_ID: ${{ secrets.REACT_APP_NAVER_CLIENT_ID }}
+            REACT_APP_NAVER_CLIENT_SECRET: ${{ secrets.REACT_APP_NAVER_CLIENT_SECRET }}
+            DB_HOST_NAME: ${{ secrets.DB_HOST_NAME }}
+            DB_HOST_USERNAME: ${{ secrets.DB_HOST_USERNAME }}
+            DB_NAME: ${{ secrets.DB_NAME }}
+            DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
