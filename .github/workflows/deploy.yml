@@ -16,7 +16,7 @@ jobs: # Github Actions 감지 후 할 일
       #  with:
       #    password: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: move to backend
-        script: |
+        run: |
           cd ~/BusanCulture/backend
       - name: Generate Environment Variables File for Production
         run: |
