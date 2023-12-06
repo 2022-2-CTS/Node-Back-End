@@ -15,6 +15,9 @@ jobs: # Github Actions 감지 후 할 일
       #  uses: appleboy/ssh-action@master
       #  with:
       #    password: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: move to backend
+        script: |
+          cd ~/BusanCulture/backend
       - name: Generate Environment Variables File for Production
         run: |
           echo "JWT_SECRET_KEY=$JWT_SECRET_KEY" >> .env.production
@@ -43,7 +46,6 @@ jobs: # Github Actions 감지 후 할 일
           port: ${{ secrets.EC2_SSH_PORT }}
           script: |
             pm2 delete 0
-            cd ~/BusanCulture/backend
             git pull
             npm install
             pm2 start npm -- start
