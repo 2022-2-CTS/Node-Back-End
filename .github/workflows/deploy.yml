@@ -34,6 +34,8 @@ jobs: # Github Actions 감지 후 할 일
           DB_HOST_USERNAME: ${{ secrets.DB_HOST_USERNAME }}
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      - name: check env
+        run: cat .env
       - name: SSH to EC2 and deploy
         uses: appleboy/ssh-action@master
         with:
