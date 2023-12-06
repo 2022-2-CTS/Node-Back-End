@@ -14,7 +14,6 @@ const maria = require('../database/connect/maria');
 
 const crypto = require('crypto-js');
 
-
 //찜 목록 저장하기
 router.post("/favorites", (req, res) => {
     try{

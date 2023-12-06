@@ -12,15 +12,12 @@ const { response } = require('express');
 const jwt = require('jsonwebtoken');
 const maria = require('../database/connect/maria');
 
-const crypto = require('crypto-js');
-
-const secretKey = 'culture';
-
+require('dotenv').config();
+const secretKey = process.env.JWT_SECRET_KEY;
 
 router.post("/status", (req, res) => {
     try{
         const userToken = req.body.userToken
-        // console.log(userToken)
 
         jwt.verify(userToken, secretKey, (err, decoded) => {
             try{

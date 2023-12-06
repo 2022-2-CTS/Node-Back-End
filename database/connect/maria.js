@@ -1,11 +1,12 @@
 const maria = require('mysql');
+require('dotenv').config();
 
 const conn = maria.createConnection({
-    host : 'busanculture.cetauvrhxmoa.us-east-1.rds.amazonaws.com',
+    host : process.env.DB_HOST_NAME,
     port : 3306,
-    user : 'root',
-    password : 'mimi1221',
-    database : 'busanCulture',
+    user : process.env.DB_HOST_USERNAME,
+    password : process.env.DB_PASSWORD,
+    database : process.env.DB_NAME,
 });
 
 module.exports = conn;

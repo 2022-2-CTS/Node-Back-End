@@ -12,12 +12,6 @@ const { response } = require('express');
 const jwt = require('jsonwebtoken');
 const maria = require('../database/connect/maria');
 
-const crypto = require('crypto-js');
-
-const secretKey = 'culture';
-
-
-
 //회원가입 부분
 //유저의 입력으로 id와 pw를 받아옴
 //데이터베이스에 저장함

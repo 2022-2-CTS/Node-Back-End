@@ -14,7 +14,8 @@ const maria = require('../database/connect/maria');
 
 const crypto = require('crypto-js');
 
-const secretKey = 'culture';
+require('dotenv').config();
+const secretKey = process.env.JWT_SECRET_KEY;
 
 router.post('/', (req, res) => {
     const token = req.body.token
