@@ -35,7 +35,7 @@ router.post('/', (req, res) => {
         return
     }
     //culture은 암호해독에 필요한 키 이다. 나중에 수정과 동시에 숨겨야 함
-    const originalPw = crypto.AES.decrypt(pw, 'culture').toString(crypto.enc.Utf8);
+    const originalPw = crypto.AES.decrypt(pw, secretKey).toString(crypto.enc.Utf8);
 
     var sql = 'SELECT * FROM USER WHERE ID = ?';
 
@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
         try{
             if(!err){
                 if (rows.length != 0){
-                    const originalPwInDB = crypto.AES.decrypt(rows[0].PW, 'culture').toString(crypto.enc.Utf8);
+                    const originalPwInDB = crypto.AES.decrypt(rows[0].PW, secretKey).toString(crypto.enc.Utf8);
                     if (originalPw == originalPwInDB){
                         console.log("우와!! 성공!!")
                         const token = jwt.sign({id : id}, secretKey, {expiresIn:'1h'})
@@ -95,8 +95,8 @@ router.post('/kakao', (req, res) => {
 
 
     const grantType = 'authorization_code'
-    const clientId = 'e6c2fe139670b147caaf750b558a4750' // REST API KEY
-    const redirectUri = 'http://localhost:3000/login/kakao'
+    const clientId = process.env.REACT_APP_KAKAO_REST_API_KEY // REST API KEY
+    const redirectUri = 'https://busan-seagull.vercel.app/login/kakao'
     const code = loginCode
 
 
@@ -194,9 +194,9 @@ router.post('/naver', (req, res) =>  {
     console.log(loginCode);
     console.log(stateCode);
 
-    const clientId = 'o9JmjRrP1GmmANohGaH1';
-    const clientSecret = 'NP5C6CJ72j'
-    const redirectUri = 'http://localhost:3000/naver-login'
+    const clientId = process.env.REACT_APP_NAVER_CLIENT_ID;
+    const clientSecret = process.env.REACT_APP_NAVER_CLIENT_SECRET
+    const redirectUri = 'https://busan-seagull.vercel.app/naver/login'
 
     apiUrl = 'https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id='
     +clientId + '&client_secret=' + clientSecret + '&redirect_uri=' + redirectUri + '&code=' + loginCode + '&state=' + stateCode;
