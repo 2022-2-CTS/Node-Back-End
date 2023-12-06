@@ -17,7 +17,6 @@ jobs: # Github Actions 감지 후 할 일
       #    password: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Generate Environment Variables File for Production
         run: |
-          echo '' > .env.production
           echo "JWT_SECRET_KEY=$JWT_SECRET_KEY" >> .env.production
           echo "REACT_APP_KAKAO_REST_API_KEY=$REACT_APP_KAKAO_REST_API_KEY" >> .env.production
           echo "REACT_APP_NAVER_CLIENT_ID=$REACT_APP_NAVER_CLIENT_ID" >> .env.production
