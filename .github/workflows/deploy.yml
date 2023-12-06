@@ -26,7 +26,7 @@ jobs: # Github Actions 감지 후 할 일
           echo "DB_NAME=$DB_NAME" >> .env.production
           echo "DB_PASSWORD=$DB_PASSWORD" >> .env.production
         env:
-          JWT_SECRET_KEY: $ {{ secrets.JWT_SECRET_KEY }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           REACT_APP_KAKAO_REST_API_KEY: ${{ secrets.REACT_APP_KAKAO_REST_API_KEY }}
           REACT_APP_NAVER_CLIENT_ID: ${{ secrets.REACT_APP_NAVER_CLIENT_ID }}
           REACT_APP_NAVER_CLIENT_SECRET: ${{ secrets.REACT_APP_NAVER_CLIENT_SECRET }}
@@ -34,8 +34,6 @@ jobs: # Github Actions 감지 후 할 일
           DB_HOST_USERNAME: ${{ secrets.DB_HOST_USERNAME }}
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      - name: check env
-        run: cat .env
       - name: SSH to EC2 and deploy
         uses: appleboy/ssh-action@master
         with:
