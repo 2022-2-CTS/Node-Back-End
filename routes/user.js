@@ -58,7 +58,7 @@ router.post("/favorites", (req, res) => {
             }
         }
         
-        var sql = 'INSERT INTO FAVORITE (ID, TITLE, LOCATION, STARTDATE, ENDDATE, TIME, PRICE, SRC) VALUES (?,?,?,?,?,?,?,?)';
+        var sql = 'INSERT INTO FAVORITE (ID, TITLE, LOCATION, STARTDATE, ENDDATE, TIME, PRICE, SRC) VALUES (?,?,?,?,?,?,?,?) WHERE NOT EXISTS (SELECT 1 FROM FAVORITE WHERE ID = ? AND TITLE = ?);';
     
         maria.query(sql, objData, function(err, rows, fields){
             try{
