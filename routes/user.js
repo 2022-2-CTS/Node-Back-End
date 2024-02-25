@@ -41,7 +41,9 @@ router.post("/favorites", (req, res) => {
                 json.event.endDate,
                 json.event.time,
                 json.event.price,
-                json.event.src
+                json.event.src,
+                json.userId,
+                json.event.title,
             ]
         }
     
